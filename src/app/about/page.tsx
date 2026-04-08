@@ -1,7 +1,18 @@
-'use client';
-
+import type { Metadata } from "next";
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: "About IntentForge",
+  description:
+    "Learn about IntentForge — the AI-powered intent-first search engine built by Oxiverse for semantic web discovery.",
+  alternates: { canonical: "https://search.oxiverse.com/about" },
+  openGraph: {
+    title: "About IntentForge by Oxiverse",
+    description: "AI-powered intent-first search engine built for the decentralized era.",
+    url: "https://search.oxiverse.com/about",
+  },
+};
 
 export default function About() {
   return (

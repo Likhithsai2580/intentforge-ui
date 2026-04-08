@@ -1,29 +1,62 @@
-'use client';
-
+import type { Metadata } from "next";
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "IntentForge by Oxiverse privacy policy. We do not sell your data. Learn how we handle search queries and interaction data.",
+  alternates: { canonical: "https://search.oxiverse.com/privacy" },
+  openGraph: {
+    title: "Privacy Policy — IntentForge by Oxiverse",
+    description: "We do not sell your data. Learn how IntentForge handles your search queries.",
+    url: "https://search.oxiverse.com/privacy",
+  },
+};
 
 export default function Privacy() {
   return (
-    <main className="min-h-screen bg-[var(--background)] p-8">
+    <main className="min-h-screen bg-[var(--background)] p-8 font-mono">
       <div className="max-w-3xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:opacity-80 mb-12 transition-opacity">
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-          Back to Search
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--accent)] mb-10 transition-colors tracking-wider uppercase"
+        >
+          &lt; back
         </Link>
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-accent to-purple-500 bg-clip-text text-transparent">Privacy Policy</h1>
-        <div className="space-y-6 text-[var(--muted)] leading-relaxed">
-          <p>
-            Your privacy is important to us. Oxiverse Search focuses on your intent without compromising your data.
-          </p>
-          <p>
-            We do not sell your personal data. We only collect search queries to improve our ranking models through anonymous feedback loops.
-          </p>
-          <h2 className="text-xl font-semibold text-[var(--foreground)] mt-8">Information We Collect</h2>
-          <ul className="list-disc pl-6 space-y-4">
-            <li>Search queries to provides results.</li>
-            <li>Interaction data (clicks) to improve our AI intent engine.</li>
-            <li>Browser and device information to optimize rendering.</li>
-          </ul>
+
+        <div className="mb-8">
+          <p className="text-[10px] text-[var(--muted)] tracking-widest mb-1">// legal</p>
+          <h1 className="text-2xl font-mono text-[var(--accent)] terminal-glow tracking-wider">PRIVACY_POLICY</h1>
+        </div>
+
+        <div className="border border-[var(--border)] bg-[var(--card)] divide-y divide-[var(--border)]">
+          <div className="px-4 py-2 bg-[var(--background)]">
+            <span className="text-[10px] text-[var(--muted)] tracking-widest uppercase">privacy.md</span>
+          </div>
+          <div className="p-6 space-y-5 text-xs text-[var(--muted)] leading-relaxed">
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> Your privacy is important to us. IntentForge focuses on your intent without compromising your data.
+            </p>
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> We do not sell your personal data. Search queries are only used to improve ranking models via anonymous feedback loops.
+            </p>
+
+            <div className="pt-2">
+              <h2 className="text-xs text-[var(--foreground)] tracking-widest uppercase mb-3">// information we collect</h2>
+              <ul className="space-y-2 pl-4">
+                {[
+                  'Search queries — to provide results.',
+                  'Interaction data (clicks) — to improve our AI intent engine.',
+                  'Browser and device info — to optimize rendering.',
+                ].map((item) => (
+                  <li key={item} className="flex gap-2">
+                    <span className="text-[var(--accent)] flex-shrink-0">-</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </main>
