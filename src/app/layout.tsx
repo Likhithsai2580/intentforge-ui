@@ -96,12 +96,7 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  verification: {
-    // Add your Google Search Console / Bing verification tokens here
-    // google: "your-google-verification-token",
-    // yandex: "your-yandex-token",
-  },
+  }
 };
 
 // JSON-LD structured data for the search engine
