@@ -163,7 +163,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/assets/intentforge.JPG" type="image/jpeg" />
         <link rel="apple-touch-icon" href="/assets/oxiverse.png" />
         <link rel="canonical" href={BASE_URL} />
         <meta name="theme-color" content="#0a0c0f" />
