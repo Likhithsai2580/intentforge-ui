@@ -25,8 +25,8 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "Oxiverse Search",
-    template: "%s | Oxiverse Search",
+    default: "IntentForge // Oxiverse",
+    template: "%s | IntentForge",
   },
   description: "Intent-first discovery across the web. Search the web, news, images, and videos with AI-powered semantic understanding.",
   keywords: ["search engine", "semantic search", "AI search", "web search", "news search", "image search", "video search"],
@@ -72,11 +72,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       suppressHydrationWarning
     >
       <head>
-        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="icon" href="/assets/intentforge.JPG" type="image/jpeg" />
         <Script
           id="theme-initializer"
           strategy="beforeInteractive"

@@ -29,65 +29,51 @@ export default function NewsResults({ results, total, latency_ms, sources }: New
     return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\|/g, '').trim();
   };
 
-  const sourceColors: Record<string, string> = {
-    google_news: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-    ddg_news: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-    bing_news: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400',
-    gdelt: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-    hackernews: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  };
-
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6 px-4">
-        <p className="text-sm text-[var(--muted)]">
-          News found <span className="font-semibold text-[var(--foreground)]">{total.toLocaleString()}</span> results
-          <span className="mx-2 text-[var(--border)]">|</span>
-          <span className="text-xs">{latency_ms}ms</span>
-        </p>
-        <div className="flex items-center gap-1.5">
-          {sources.map((s) => (
-            <span key={s} className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${sourceColors[s] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>
-              {s.replace(/_/g, ' ')}
-            </span>
-          ))}
-        </div>
+    <div className="font-mono">
+      <div className="flex items-center gap-3 mb-6 px-1 text-xs text-[var(--muted)]">
+        <span className="text-[var(--accent)]">$</span>
+        <span>found <span className="text-[var(--foreground)]">{total.toLocaleString()}</span> news results</span>
+        <span className="text-[var(--border)]">//</span>
+        <span className="text-[var(--terminal-cyan)]">{latency_ms}ms</span>
+        <span className="text-[var(--border)]">//</span>
+        <span className="text-[var(--muted)]">{sources.map(s => s.replace(/_/g, '.')).join(' ')}</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {results.map((result, idx) => (
           <a
             key={idx}
             href={result.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col bg-[var(--card)] border border-[var(--border)] rounded-xl overflow-hidden hover:border-[var(--accent)] hover:shadow-lg hover:shadow-[var(--ring)] transition-all duration-300 animate-slide-up"
+            className="group flex flex-col bg-[var(--card)] border border-[var(--border)] overflow-hidden hover:border-[var(--accent)] transition-all duration-150 animate-slide-up"
             style={{ animationDelay: `${idx * 0.05}s`, animationFillMode: 'forwards', opacity: 0 }}
           >
             {result.thumbnail_url && (
-              <div className="relative h-36 overflow-hidden bg-[var(--background)]">
+              <div className="relative h-32 overflow-hidden bg-[var(--background)]">
                 <img
                   src={result.thumbnail_url}
                   alt=""
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] to-transparent" />
               </div>
             )}
-            <div className={`flex-1 p-4 ${!result.thumbnail_url && 'pt-3'}`}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${sourceColors[result.source] || 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'}`}>
-                  {result.source.replace(/_/g, ' ')}
+            <div className="flex-1 p-3">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-[9px] border border-[var(--border)] px-1.5 py-0.5 text-[var(--muted)] uppercase tracking-wider">
+                  {result.source.replace(/_/g, '.')}
                 </span>
                 {result.published_at && (
-                  <span className="text-[11px] text-[var(--muted)]">{formatTime(result.published_at)}</span>
+                  <span className="text-[10px] text-[var(--muted)]">{formatTime(result.published_at)}</span>
                 )}
               </div>
-              <h3 className="text-sm font-semibold text-[var(--foreground)] group-hover:text-accent transition-colors leading-snug line-clamp-2 mb-1.5">
-                {stripHtml(result.title)}
+              <h3 className="text-xs text-[var(--accent)] group-hover:terminal-glow transition-colors leading-snug line-clamp-2 mb-1">
+                &gt; {stripHtml(result.title)}
               </h3>
-              <p className="text-xs text-[var(--muted)] line-clamp-2 leading-relaxed">
+              <p className="text-[11px] text-[var(--muted)] line-clamp-2 leading-relaxed">
                 {stripHtml(result.description)}
               </p>
             </div>

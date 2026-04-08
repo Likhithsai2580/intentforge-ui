@@ -1,20 +1,25 @@
 @import "tailwindcss";
 
-/* Default Light Mode */
+/* Retro Terminal Theme */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --card: #ffffff;
-  --card-hover: #f8fafc;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-light: #eef2ff;
-  --ring: rgba(99, 102, 241, 0.2);
-  --gradient-start: #6366f1;
-  --gradient-mid: #8b5cf6;
-  --gradient-end: #06b6d4;
+  --background: #0a0c0f;
+  --foreground: #00ff9d;
+  --muted: #4a7c6a;
+  --border: #1a3a2a;
+  --card: #0d1117;
+  --card-hover: #111a14;
+  --accent: #00ff9d;
+  --accent-hover: #00cc7a;
+  --accent-light: #001a0f;
+  --accent-dim: #00ff9d33;
+  --ring: rgba(0, 255, 157, 0.15);
+  --gradient-start: #00ff9d;
+  --gradient-mid: #00d4ff;
+  --gradient-end: #7b2fff;
+  --terminal-amber: #ffb300;
+  --terminal-red: #ff3b3b;
+  --terminal-cyan: #00d4ff;
+  --scanline: rgba(0, 255, 157, 0.03);
 }
 
 @theme inline {
@@ -28,34 +33,100 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
   --color-ring: var(--ring);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-geist-mono);
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark Mode Overrides */
+/* Dark mode is always terminal mode */
 .dark {
-  --background: #0b0f1a;
-  --foreground: #e2e8f0;
-  --muted: #94a3b8;
-  --border: #1e293b;
-  --card: #111827;
-  --card-hover: #1e293b;
-  --accent: #818cf8;
-  --accent-hover: #6366f1;
-  --accent-light: #1e1b4b;
-  --ring: rgba(129, 140, 248, 0.2);
+  --background: #0a0c0f;
+  --foreground: #00ff9d;
+  --muted: #4a7c6a;
+  --border: #1a3a2a;
+  --card: #0d1117;
+  --card-hover: #111a14;
+  --accent: #00ff9d;
+  --accent-hover: #00cc7a;
+  --accent-light: #001a0f;
+  --ring: rgba(0, 255, 157, 0.15);
 }
 
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-mono), 'Courier New', monospace;
   transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative;
+}
+
+/* CRT scanlines overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--scanline) 2px,
+    var(--scanline) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* CRT vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Terminal text glow */
+.terminal-glow {
+  text-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent-dim);
+}
+
+.terminal-glow-dim {
+  text-shadow: 0 0 4px var(--accent-dim);
+}
+
+.terminal-glow-cyan {
+  text-shadow: 0 0 8px var(--terminal-cyan), 0 0 20px rgba(0, 212, 255, 0.3);
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Terminal border glow */
+.terminal-border {
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px var(--accent-dim), inset 0 0 20px rgba(0, 255, 157, 0.02);
+}
+
+.terminal-border-active {
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 8px var(--accent-dim), 0 0 20px rgba(0, 255, 157, 0.1), inset 0 0 20px rgba(0, 255, 157, 0.03);
 }
 
 @keyframes gradient-shift {
@@ -69,8 +140,8 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }
 
 @keyframes slide-up {
@@ -88,34 +159,32 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
+@keyframes terminal-type {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
 .animate-gradient {
   background-size: 200% 200%;
   animation: gradient-shift 8s ease infinite;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delay {
-  animation: float 6s ease-in-out 2s infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.4s ease-out;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-.animate-scale-in {
-  animation: scale-in 0.2s ease-out;
-}
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-float-delay { animation: float 6s ease-in-out 2s infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.4s ease-out; }
+.animate-fade-in { animation: fade-in 0.3s ease-out; }
+.animate-scale-in { animation: scale-in 0.2s ease-out; }
+.animate-flicker { animation: flicker 8s ease-in-out infinite; }
 
 .stagger-1 { animation-delay: 0.05s; opacity: 0; animation-fill-mode: forwards; }
 .stagger-2 { animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; }
@@ -123,25 +192,9 @@ body {
 .stagger-4 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
 .stagger-5 { animation-delay: 0.25s; opacity: 0; animation-fill-mode: forwards; }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--background); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
-}
-
-::selection {
-  background: var(--accent);
-  color: white;
-}
+::selection { background: var(--accent); color: #000; }

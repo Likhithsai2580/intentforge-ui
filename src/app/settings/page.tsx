@@ -4,38 +4,36 @@ import Link from 'next/link';
 
 export default function Settings() {
   return (
-    <main className="min-h-screen bg-[var(--background)] p-8">
+    <main className="min-h-screen bg-[var(--background)] p-8 font-mono">
       <div className="max-w-3xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:opacity-80 mb-12 transition-opacity">
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-          Back to Search
+        <Link href="/" className="inline-flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--accent)] mb-10 transition-colors tracking-wider uppercase">
+          <span>&lt;</span> back
         </Link>
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-accent to-purple-500 bg-clip-text text-transparent">Settings</h1>
-        
-        <div className="space-y-8 bg-[var(--card)] p-8 rounded-2xl border border-[var(--border)] shadow-sm">
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Search Preferences</h2>
-            <p className="text-sm text-[var(--muted)] mb-4">Customize your search experience.</p>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-[var(--background)] rounded-xl border border-[var(--border)]">
+
+        <div className="mb-8">
+          <p className="text-[10px] text-[var(--muted)] tracking-widest mb-1">// config</p>
+          <h1 className="text-2xl font-mono text-[var(--accent)] terminal-glow tracking-wider">SETTINGS</h1>
+        </div>
+
+        <div className="border border-[var(--border)] bg-[var(--card)]" style={{ boxShadow: '0 0 20px rgba(0,255,157,0.04)' }}>
+          <div className="px-4 py-2 border-b border-[var(--border)] bg-[var(--background)]">
+            <span className="text-[10px] text-[var(--muted)] tracking-widest uppercase">search_preferences.cfg</span>
+          </div>
+          <div className="p-6 space-y-4">
+            {[
+              { key: 'SAFE_SEARCH', desc: 'Filter explicit content from results', on: true },
+              { key: 'DEEP_SEARCH', desc: 'Use IntentForge for deeper analysis (slower, better)', on: true },
+            ].map(({ key, desc, on }) => (
+              <div key={key} className="flex items-center justify-between p-4 border border-[var(--border)] bg-[var(--background)]">
                 <div>
-                  <h3 className="font-medium">Safe Search</h3>
-                  <p className="text-xs text-[var(--muted)]">Filter explicit content from your results.</p>
+                  <p className="text-sm text-[var(--foreground)] tracking-wider">{key}</p>
+                  <p className="text-[11px] text-[var(--muted)] mt-0.5">// {desc}</p>
                 </div>
-                <div className="w-12 h-6 bg-accent/20 rounded-full flex items-center px-1">
-                  <div className="w-4 h-4 bg-accent rounded-full translate-x-6" />
-                </div>
+                <span className={`text-xs px-2 py-1 border ${on ? 'border-[var(--accent)] text-[var(--accent)]' : 'border-[var(--border)] text-[var(--muted)]'}`}>
+                  {on ? '[ON]' : '[OFF]'}
+                </span>
               </div>
-              <div className="flex items-center justify-between p-4 bg-[var(--background)] rounded-xl border border-[var(--border)]">
-                <div>
-                  <h3 className="font-medium">Deep Search</h3>
-                  <p className="text-xs text-[var(--muted)]">Use IntentForge for deeper analysis (slower but better results).</p>
-                </div>
-                <div className="w-12 h-6 bg-accent/20 rounded-full flex items-center px-1">
-                  <div className="w-4 h-4 bg-accent rounded-full translate-x-6" />
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

@@ -1,24 +1,47 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function About() {
   return (
-    <main className="min-h-screen bg-[var(--background)] p-8">
+    <main className="min-h-screen bg-[var(--background)] p-8 font-mono">
       <div className="max-w-3xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:opacity-80 mb-12 transition-opacity">
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-          Back to Search
+        <Link href="/" className="inline-flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--accent)] mb-10 transition-colors tracking-wider uppercase">
+          <span>&lt;</span> back
         </Link>
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-accent to-purple-500 bg-clip-text text-transparent">About Oxiverse</h1>
-        <div className="space-y-6 text-[var(--muted)] leading-relaxed">
-          <p>
-            Oxiverse is a next-generation intent-first search engine designed to help you discover information more effectively. 
-            By leveraging advanced AI techniques from IntentForge, we provide deeply relevant results that understand the underlying context of your queries.
-          </p>
-          <p>
-            Our mission is to make the web more accessible and intuitive, moving beyond simple keyword matching to true semantic discovery.
-          </p>
+
+        <div className="mb-8">
+          <p className="text-[10px] text-[var(--muted)] tracking-widest mb-1">// about</p>
+          <h1 className="text-2xl font-mono text-[var(--accent)] terminal-glow tracking-wider">OXIVERSE // INTENTFORGE</h1>
+        </div>
+
+        <div className="border border-[var(--border)] bg-[var(--card)] p-6 space-y-6">
+          <div className="flex items-center gap-4 pb-4 border-b border-[var(--border)]">
+            <Image src="/assets/oxiverse.png" alt="Oxiverse" width={48} height={48} className="rounded-full opacity-90" />
+            <div>
+              <p className="text-sm text-[var(--foreground)] tracking-wider">OXIVERSE</p>
+              <p className="text-[10px] text-[var(--muted)]">// parent company</p>
+            </div>
+            <span className="text-[var(--border)] mx-2">×</span>
+            <Image src="/assets/intentforge.JPG" alt="IntentForge" width={40} height={40} className="rounded-sm opacity-90" />
+            <div>
+              <p className="text-sm text-[var(--foreground)] tracking-wider">INTENTFORGE</p>
+              <p className="text-[10px] text-[var(--muted)]">// search engine</p>
+            </div>
+          </div>
+
+          <div className="space-y-4 text-xs text-[var(--muted)] leading-relaxed">
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> Oxiverse is a next-generation intent-first search engine designed for effective discovery.
+            </p>
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> Powered by IntentForge AI — moving beyond keyword matching to true semantic understanding.
+            </p>
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> Built for the decentralized era. Open-source. Intent-driven.
+            </p>
+          </div>
         </div>
       </div>
     </main>

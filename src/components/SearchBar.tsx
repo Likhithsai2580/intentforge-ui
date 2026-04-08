@@ -26,9 +26,7 @@ export default function SearchBar({ initialQuery = '', onSearch, isLoading, hasR
     } catch {}
   }, []);
 
-  useEffect(() => {
-    setQuery(initialQuery);
-  }, [initialQuery]);
+  useEffect(() => { setQuery(initialQuery); }, [initialQuery]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -83,16 +81,15 @@ export default function SearchBar({ initialQuery = '', onSearch, isLoading, hasR
   };
 
   return (
-    <div ref={wrapperRef} className={`relative w-full transition-all duration-500 ${hasResults ? 'max-w-2xl mx-auto' : 'max-w-3xl mx-auto'}`}>
+    <div ref={wrapperRef} className={`relative w-full ${hasResults ? 'max-w-2xl mx-auto' : 'max-w-3xl mx-auto'}`}>
       <form onSubmit={handleSubmit}>
-        <div className={`relative flex items-center rounded-2xl border transition-all duration-300 ${
-          focused
-            ? 'border-accent ring-4 ring-[var(--ring)] shadow-lg shadow-[var(--ring)]'
-            : 'border-[var(--border)] shadow-sm hover:shadow-md'
+        <div className={`relative flex items-center transition-all duration-200 ${
+          focused ? 'terminal-border-active' : 'terminal-border'
         } bg-[var(--card)]`}>
-          <svg className={`ml-5 h-5 w-5 flex-shrink-0 transition-colors ${focused ? 'text-accent' : 'text-[var(--muted)]'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+          {/* Prompt prefix */}
+          <span className="ml-3 text-[var(--accent)] font-mono text-sm terminal-glow select-none flex-shrink-0">
+            {isLoading ? '~$' : 'C:\\&gt;'}
+          </span>
           <input
             ref={inputRef}
             type="text"
@@ -100,54 +97,47 @@ export default function SearchBar({ initialQuery = '', onSearch, isLoading, hasR
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => { setFocused(true); if (recents.length > 0) setShowRecents(true); }}
             onBlur={() => setFocused(false)}
-            placeholder="Search anything..."
-            className="w-full px-4 py-4 bg-transparent text-[var(--foreground)] text-base placeholder-[var(--muted)] focus:outline-none"
+            placeholder="query --intent-first..."
+            className="w-full px-3 py-3.5 bg-transparent text-[var(--foreground)] text-sm font-mono placeholder-[var(--muted)] focus:outline-none tracking-wide"
           />
-          {!query && (
-            <kbd className="hidden sm:inline-flex mr-2 items-center gap-1 px-2 py-1 text-xs text-[var(--muted)] bg-[var(--background)] rounded-lg border border-[var(--border)]">
-              <span className="font-medium">⌘</span>K
+          {!query && !hasResults && (
+            <kbd className="hidden sm:inline-flex mr-2 items-center gap-1 px-2 py-1 text-[10px] text-[var(--muted)] bg-[var(--background)] font-mono border border-[var(--border)]">
+              ^K
             </kbd>
           )}
           <button
             type="submit"
             disabled={isLoading || !query.trim()}
-            className="mr-2 p-2.5 rounded-xl bg-accent hover:bg-[var(--accent-hover)] disabled:opacity-40 disabled:cursor-not-allowed text-white transition-all duration-200 hover:scale-105 active:scale-95"
+            className="mr-2 px-3 py-2 font-mono text-xs tracking-widest border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-black disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 uppercase"
           >
             {isLoading ? (
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
+              <span className="flex items-center gap-1">
+                <span className="cursor-blink">_</span>
+                <span>EXEC</span>
+              </span>
             ) : (
-              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
+              'RUN'
             )}
           </button>
         </div>
       </form>
 
       {showRecents && recents.length > 0 && (
-        <div className="absolute z-50 w-full mt-2 bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-xl animate-scale-in overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--border)]">
-            <span className="text-xs font-medium text-[var(--muted)] uppercase tracking-wider">Recent searches</span>
-            <button
-              onClick={clearRecents}
-              className="text-xs text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
-            >
-              Clear
+        <div className="absolute z-50 w-full mt-0 bg-[var(--card)] border border-[var(--accent)] animate-scale-in overflow-hidden" style={{ boxShadow: '0 0 20px rgba(0,255,157,0.1)' }}>
+          <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)]">
+            <span className="text-[10px] font-mono text-[var(--muted)] uppercase tracking-widest">// recent queries</span>
+            <button onClick={clearRecents} className="text-[10px] font-mono text-[var(--muted)] hover:text-[var(--terminal-red)] transition-colors uppercase">
+              [clear]
             </button>
           </div>
-          {recents.map((r, i) => (
+          {recents.map((r) => (
             <button
               key={r}
               onMouseDown={() => handleRecentClick(r)}
-              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--card-hover)] transition-colors"
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-[var(--card-hover)] transition-colors border-b border-[var(--border)] last:border-0"
             >
-              <svg className="h-4 w-4 text-[var(--muted)] flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm text-[var(--foreground)] truncate">{r}</span>
+              <span className="text-[var(--muted)] font-mono text-xs flex-shrink-0">↑</span>
+              <span className="text-sm font-mono text-[var(--foreground)] truncate">{r}</span>
             </button>
           ))}
         </div>
