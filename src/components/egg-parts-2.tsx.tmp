@@ -1,0 +1,347 @@
+
+/* ════════════════════════════════════════════
+   segfault  →  green BSOD then reboots
+════════════════════════════════════════════ */
+function SegfaultEgg({ onDismiss }: { onDismiss: () => void }) {
+  const [phase, setPhase] = useState<'crash'|'reboot'|'ok'>('crash');
+  useEffect(() => {
+    const t1 = setTimeout(() => setPhase('reboot'), 2500);
+    const t2 = setTimeout(() => setPhase('ok'), 4200);
+    const t3 = setTimeout(onDismiss, 7000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [onDismiss]);
+
+  if (phase === 'crash') return (
+    <div className="fixed inset-0 z-[9990] flex flex-col items-center justify-center font-mono"
+      style={{ background: '#001a0f' }}>
+      <div className="text-center space-y-4 p-8 max-w-lg">
+        <p className="text-6xl font-bold" style={{ color: '#00ff9d', textShadow: '0 0 40px #00ff9d' }}>:(</p>
+        <p className="text-2xl font-bold tracking-widest" style={{ color: '#00ff9d' }}>SEGMENTATION FAULT</p>
+        <p className="text-sm" style={{ color: '#4a7c6a' }}>Your PC ran into a problem it could not handle.</p>
+        <p className="text-xs" style={{ color: '#4a7c6a' }}>Stop code: <span style={{ color: '#ff3b3b' }}>DANGLING_POINTER_DETECTED</span></p>
+        <p className="text-xs animate-pulse" style={{ color: '#4a7c6a' }}>Collecting error info... 0%</p>
+        <p className="text-xs mt-4" style={{ color: '#00ff9d' }}>// Rust says: Not today. 🛡️</p>
+      </div>
+    </div>
+  );
+
+  if (phase === 'reboot') return (
+    <div className="fixed inset-0 z-[9990] flex items-center justify-center font-mono" style={{ background: '#0a0c0f' }}>
+      <p className="text-xs tracking-widest animate-pulse" style={{ color: '#00ff9d' }}>REBOOTING UNIVERSE...</p>
+    </div>
+  );
+
+  return (
+    <Shell onClose={onDismiss} title="SYSTEM // RECOVERED" accent="#00ff9d">
+      <div className="p-6 text-center space-y-3">
+        <p className="text-4xl">🛡️</p>
+        <p className="text-sm font-bold" style={{ color: '#00ff9d' }}>Memory safe. No crash. Rust wins.</p>
+        <p className="text-xs" style={{ color: '#4a7c6a' }}>The borrow checker caught it before it happened.</p>
+      </div>
+    </Shell>
+  );
+}
+
+/* ════════════════════════════════════════════
+   grep -r privacy  →  file tree + highlights
+════════════════════════════════════════════ */
+const GREP_RESULTS = [
+  { file: 'src/app/privacy/page.tsx',   line: 1,  match: 'We collect nothing.' },
+  { file: 'src/app/privacy/page.tsx',   line: 2,  match: 'We store nothing.' },
+  { file: 'src/app/privacy/page.tsx',   line: 3,  match: 'We sell nothing.' },
+  { file: 'src/lib/api.ts',             line: 1,  match: '// no analytics calls here' },
+  { file: 'src/app/api/proxy/route.ts', line: 1,  match: '// no logging middleware' },
+  { file: 'README.md',                  line: 42, match: 'Privacy-first by design.' },
+];
+
+function GrepPrivacyEgg({ onDismiss }: { onDismiss: () => void }) {
+  const [shown, setShown] = useState(0);
+  const [done, setDone] = useState(false);
+  useAutoDismiss(8000, onDismiss);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setShown(s => {
+        if (s >= GREP_RESULTS.length) { setDone(true); return s; }
+        return s + 1;
+      });
+    }, 350);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <Shell onClose={onDismiss} title='grep -r "privacy" .' accent="#00ff9d">
+      <div className="p-5 space-y-1">
+        {GREP_RESULTS.slice(0, shown).map((r, i) => (
+          <p key={i} className="text-xs font-mono animate-fade-in">
+            <span style={{ color: '#7b2fff' }}>{r.file}</span>
+            <span style={{ color: '#4a7c6a' }}>:{r.line}:</span>
+            <span style={{ color: '#00ff9d' }}> {r.match}</span>
+          </p>
+        ))}
+        {!done && <span className="cursor-blink text-xs" style={{ color: '#00ff9d' }}>█</span>}
+        {done && (
+          <p className="text-xs pt-2 border-t animate-fade-in" style={{ borderColor: '#1a3a2a', color: '#4a7c6a' }}>
+            {GREP_RESULTS.length} matches. That is the whole policy.
+          </p>
+        )}
+      </div>
+    </Shell>
+  );
+}
+
+/* ════════════════════════════════════════════
+   ravana activate  →  ASCII builds line by line
+════════════════════════════════════════════ */
+const RAVANA_ART = [
+  '  ██████╗  █████╗ ██╗   ██╗ █████╗ ███╗   ██╗ █████╗',
+  '  ██╔══██╗██╔══██╗██║   ██║██╔══██╗████╗  ██║██╔══██╗',
+  '  ██████╔╝███████║██║   ██║███████║██╔██╗ ██║███████║',
+  '  ██╔══██╗██╔══██║╚██╗ ██╔╝██╔══██║██║╚██╗██║██╔══██║',
+  '  ██║  ██║██║  ██║ ╚████╔╝ ██║  ██║██║ ╚████║██║  ██║',
+  '  ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝',
+];
+
+function RavanaEgg({ onDismiss }: { onDismiss: () => void }) {
+  const [lines, setLines] = useState(0);
+  const [quote, setQuote] = useState(false);
+  useAutoDismiss(9000, onDismiss);
+  useEffect(() => {
+    const id = setInterval(() => setLines(l => Math.min(l+1, RAVANA_ART.length)), 180);
+    setTimeout(() => setQuote(true), RAVANA_ART.length * 180 + 400);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <Shell onClose={onDismiss} title="RAVANA_AGI // BOOT SEQUENCE" accent="#00ff9d">
+      <div className="p-5 space-y-3">
+        <pre className="text-[10px] leading-tight overflow-x-auto"
+          style={{ color: '#00ff9d', textShadow: '0 0 8px #00ff9d, 0 0 20px #00ff9d44' }}>
+          {RAVANA_ART.slice(0, lines).join('\n')}
+          {lines < RAVANA_ART.length && <span className="cursor-blink">█</span>}
+        </pre>
+        {quote && (
+          <div className="border-t pt-3 animate-fade-in space-y-1" style={{ borderColor: '#1a3a2a' }}>
+            <p className="text-sm italic" style={{ color: '#00d4ff' }}>
+              I am not a search engine. I am an intent engine.
+            </p>
+            <p className="text-[10px]" style={{ color: '#4a7c6a' }}>— RAVANA AGI, Oxiverse Core</p>
+          </div>
+        )}
+      </div>
+    </Shell>
+  );
+}
+
+/* ════════════════════════════════════════════
+   asura protocol  →  radar sweep
+════════════════════════════════════════════ */
+function AsuraEgg({ onDismiss }: { onDismiss: () => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [status, setStatus] = useState('INITIALIZING...');
+  useAutoDismiss(7000, onDismiss);
+
+  useEffect(() => {
+    const msgs = ['LOADING MODULES...','ETHICS CHECK...','ALIGNMENT: PASSED','AGENTIC SYSTEM ONLINE'];
+    msgs.forEach((m, i) => setTimeout(() => setStatus(m), 800 + i * 700));
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current; if (!canvas) return;
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    const S = 160; canvas.width = S; canvas.height = S;
+    const cx = S/2, cy = S/2, r = 70;
+    let angle = 0;
+    const draw = () => {
+      ctx.clearRect(0,0,S,S);
+      [0.3,0.6,1].forEach(f => {
+        ctx.beginPath(); ctx.arc(cx,cy,r*f,0,Math.PI*2);
+        ctx.strokeStyle = '#1a3a2a'; ctx.lineWidth = 1; ctx.stroke();
+      });
+      ctx.strokeStyle = '#1a3a2a'; ctx.lineWidth = 0.5;
+      ctx.beginPath(); ctx.moveTo(cx-r,cy); ctx.lineTo(cx+r,cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx,cy-r); ctx.lineTo(cx,cy+r); ctx.stroke();
+      ctx.save();
+      ctx.translate(cx,cy);
+      ctx.rotate(angle);
+      const sweep = ctx.createLinearGradient(0,0,r,0);
+      sweep.addColorStop(0,'rgba(0,255,157,0.5)');
+      sweep.addColorStop(1,'rgba(0,255,157,0)');
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r,-0.4,0); ctx.closePath();
+      ctx.fillStyle = sweep; ctx.fill();
+      ctx.restore();
+      [[0.4,0.3],[0.7,-0.5],[-0.3,0.6]].forEach(([fx,fy]) => {
+        const bx = cx + fx*r, by = cy + fy*r;
+        ctx.beginPath(); ctx.arc(bx,by,2,0,Math.PI*2);
+        ctx.fillStyle = '#00ff9d'; ctx.shadowColor = '#00ff9d'; ctx.shadowBlur = 6; ctx.fill();
+      });
+      angle += 0.04;
+    };
+    const id = setInterval(draw, 30);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <Shell onClose={onDismiss} title="ASURA_PROTOCOL // ACTIVATING" accent="#00ff9d">
+      <div className="p-5 flex items-center gap-6">
+        <canvas ref={canvasRef} className="flex-shrink-0" />
+        <div className="space-y-3">
+          <p className="text-xs tracking-widest animate-pulse" style={{ color: '#00ff9d' }}>{status}</p>
+          <p className="text-sm font-bold" style={{ color: '#00ff9d', textShadow: '0 0 10px #00ff9d' }}>
+            Awaiting your command, Architect.
+          </p>
+          <p className="text-[10px]" style={{ color: '#4a7c6a' }}>3 agents online // 0 threats detected</p>
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ════════════════════════════════════════════
+   oxiverse origin  →  Star Wars crawl
+════════════════════════════════════════════ */
+function OxiverseOriginEgg({ onDismiss }: { onDismiss: () => void }) {
+  useAutoDismiss(12000, onDismiss);
+  return (
+    <div className="fixed inset-0 z-[9990] flex items-end justify-center overflow-hidden font-mono cursor-pointer"
+      style={{ background: '#0a0c0f', perspective: '400px' }}
+      onClick={onDismiss}>
+      <div className="w-full max-w-lg text-center pb-8"
+        style={{
+          transform: 'rotateX(25deg)',
+          transformOrigin: 'bottom center',
+          animation: 'egg-crawl 10s linear forwards',
+        }}>
+        <style>{`@keyframes egg-crawl { from { transform: rotateX(25deg) translateY(100vh); } to { transform: rotateX(25deg) translateY(-200%); } }`}</style>
+        <p className="text-xs tracking-widest mb-8" style={{ color: '#ffb300' }}>A LONG TIME AGO, ON A WEB FAR, FAR AWAY...</p>
+        <p className="text-2xl font-bold tracking-widest mb-6" style={{ color: '#00ff9d', textShadow: '0 0 20px #00ff9d' }}>OXIVERSE</p>
+        <p className="text-sm leading-loose" style={{ color: '#4a7c6a' }}>
+          Built by one dev, one vision.<br/>
+          A web where intent matters more than keywords.<br/><br/>
+          No ads. No tracking. No compromise.<br/><br/>
+          <span style={{ color: '#00ff9d' }}>Oxi</span> = oxidize the old web.<br/>
+          <span style={{ color: '#00d4ff' }}>Verse</span> = build a new one.<br/><br/>
+          The search engine the internet deserves.<br/><br/>
+          <span style={{ color: '#7b2fff' }}>— @itxLikhith</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════
+   grace framework  →  checklist fills up
+════════════════════════════════════════════ */
+const GRACE_CHECKS = [
+  { label: 'Ethics module',      status: 'ACTIVE',  color: '#00ff9d' },
+  { label: 'Bias detection',     status: 'RUNNING', color: '#00d4ff' },
+  { label: 'Alignment score',    status: '99.7%',   color: '#00ff9d' },
+  { label: 'Human oversight',    status: 'ENABLED', color: '#00ff9d' },
+  { label: 'Harm prevention',    status: 'LOCKED',  color: '#ffb300' },
+  { label: 'Transparency layer', status: 'OPEN',    color: '#00ff9d' },
+];
+
+function GraceEgg({ onDismiss }: { onDismiss: () => void }) {
+  const [done, setDone] = useState(0);
+  useAutoDismiss(8000, onDismiss);
+  useEffect(() => {
+    const id = setInterval(() => setDone(d => Math.min(d+1, GRACE_CHECKS.length)), 500);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <Shell onClose={onDismiss} title="GRACE_FRAMEWORK // ALIGNMENT CHECK" accent="#00ff9d">
+      <div className="p-5 space-y-3">
+        {GRACE_CHECKS.map((c, i) => (
+          <div key={i} className={`flex items-center gap-3 text-xs transition-all duration-500 ${i < done ? 'opacity-100' : 'opacity-20'}`}>
+            <div className="w-4 h-4 border flex items-center justify-center flex-shrink-0"
+              style={{ borderColor: i < done ? c.color : '#1a3a2a' }}>
+              {i < done && <span style={{ color: c.color, fontSize: 10 }}>✓</span>}
+            </div>
+            <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: '#1a3a2a' }}>
+              <div className="h-full transition-all duration-700"
+                style={{ width: i < done ? '100%' : '0%', background: c.color, boxShadow: `0 0 6px ${c.color}`, transitionDelay: `${i * 100}ms` }} />
+            </div>
+            <span style={{ color: i < done ? c.color : '#4a7c6a' }}>{c.label}</span>
+            <span className="text-[10px]" style={{ color: i < done ? c.color : '#1a3a2a' }}>{c.status}</span>
+          </div>
+        ))}
+        {done >= GRACE_CHECKS.length && (
+          <p className="text-sm font-bold animate-fade-in pt-2" style={{ color: '#00ff9d', textShadow: '0 0 10px #00ff9d' }}>
+            RAVANA is human-aligned.
+          </p>
+        )}
+      </div>
+    </Shell>
+  );
+}
+
+/* ════════════════════════════════════════════
+   intent --deep  →  scanning ring + stats count up
+════════════════════════════════════════════ */
+function IntentDeepEgg({ onDismiss }: { onDismiss: () => void }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [curiosity, setCuriosity] = useState(0);
+  const [mischief, setMischief] = useState(0);
+  const [done, setDone] = useState(false);
+  useAutoDismiss(7000, onDismiss);
+
+  useEffect(() => {
+    const canvas = canvasRef.current; if (!canvas) return;
+    const ctx = canvas.getContext('2d'); if (!ctx) return;
+    const S = 120; canvas.width = S; canvas.height = S;
+    let angle = -Math.PI/2, progress = 0;
+    const draw = () => {
+      ctx.clearRect(0,0,S,S);
+      ctx.beginPath(); ctx.arc(S/2,S/2,50,0,Math.PI*2);
+      ctx.strokeStyle = '#1a3a2a'; ctx.lineWidth = 8; ctx.stroke();
+      ctx.beginPath(); ctx.arc(S/2,S/2,50,angle,angle+progress*Math.PI*2);
+      ctx.strokeStyle = '#00ff9d'; ctx.lineWidth = 8;
+      ctx.shadowColor = '#00ff9d'; ctx.shadowBlur = 10; ctx.stroke();
+      progress = Math.min(progress + 0.008, 1);
+      angle -= 0.04;
+    };
+    const id = setInterval(draw, 20);
+    const countUp = (setter: (v: number) => void, target: number, delay: number) => {
+      setTimeout(() => {
+        let v = 0;
+        const ci = setInterval(() => { v = Math.min(v+2, target); setter(v); if (v>=target) clearInterval(ci); }, 30);
+      }, delay);
+    };
+    countUp(setCuriosity, 94, 500);
+    countUp(setMischief, 6, 800);
+    setTimeout(() => setDone(true), 3000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <Shell onClose={onDismiss} title="INTENT_ANALYZER // DEEP SCAN" accent="#00ff9d">
+      <div className="p-5 flex items-center gap-6">
+        <canvas ref={canvasRef} className="flex-shrink-0" />
+        <div className="space-y-3 flex-1">
+          <div className="space-y-2 text-xs">
+            {[
+              { label: 'curiosity', val: curiosity, color: '#00ff9d' },
+              { label: 'mischief',  val: mischief,  color: '#ffb300' },
+            ].map(s => (
+              <div key={s.label}>
+                <div className="flex justify-between mb-1">
+                  <span style={{ color: '#4a7c6a' }}>{s.label}</span>
+                  <span style={{ color: s.color }}>{s.val}%</span>
+                </div>
+                <div className="h-1 rounded-full overflow-hidden" style={{ background: '#1a3a2a' }}>
+                  <div className="h-full transition-all duration-100" style={{ width: `${s.val}%`, background: s.color, boxShadow: `0 0 6px ${s.color}` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          {done && (
+            <div className="animate-fade-in space-y-1 pt-2 border-t" style={{ borderColor: '#1a3a2a' }}>
+              <p className="text-[10px]" style={{ color: '#4a7c6a' }}>threat level: <span style={{ color: '#00ff9d' }}>adorable</span></p>
+              <p className="text-xs font-bold" style={{ color: '#00ff9d' }}>verdict: you are one of us.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </Shell>
+  );
+}

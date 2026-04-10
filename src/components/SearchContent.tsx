@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,8 +15,12 @@ import ContentModal from '@/components/ContentModal';
 import Pagination from '@/components/Pagination';
 import BackToTop from '@/components/BackToTop';
 import RetryTerminal from '@/components/RetryTerminal';
+import EasterEggOverlay from '@/components/EasterEggOverlay';
 import { searchWeb, searchNews, searchImages, searchVideos } from '@/lib/api';
+import { matchEasterEgg, EasterEgg } from '@/lib/easter_eggs';
 import { SearchResult } from '@/types';
+
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
 
 const suggestions = [
   'Latest AI breakthroughs',
@@ -43,7 +47,22 @@ export default function SearchContent() {
   const [offset, setOffset] = useState(0);
   const [retryAttempt, setRetryAttempt] = useState(0); // 0 = not retrying, 1-3 = retry in progress
   const [retryQuery, setRetryQuery] = useState('');
+  const [activeEgg, setActiveEgg] = useState<{ egg: EasterEgg; query: string } | null>(null);
   const limit = 15;
+
+  // Konami code listener
+  useEffect(() => {
+    let seq: string[] = [];
+    const handler = (e: KeyboardEvent) => {
+      seq = [...seq, e.key].slice(-KONAMI.length);
+      if (seq.join(',') === KONAMI.join(',')) {
+        setActiveEgg({ egg: { id: 'konami', pattern: /^__konami__$/, type: 'konami', response: '' }, query: '↑↑↓↓←→←→BA' });
+      }
+      if (e.key === 'Escape') setActiveEgg(null);
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   const fetchOnce = useCallback(async (q: string, tab: string, newOffset: number) => {
     if (tab === 'web') {
@@ -118,6 +137,11 @@ export default function SearchContent() {
   };
 
   const handleSearch = (q: string) => {
+    const egg = matchEasterEgg(q);
+    if (egg) {
+      setActiveEgg({ egg, query: q });
+      return;
+    }
     setOffset(0);
     performSearch(q, activeTab, 0);
   };
@@ -316,6 +340,14 @@ export default function SearchContent() {
         <ContentModal id={selectedContentId} onClose={() => setSelectedContentId(null)} />
       )}
       <BackToTop />
+
+      {activeEgg && (
+        <EasterEggOverlay
+          egg={activeEgg.egg}
+          query={activeEgg.query}
+          onDismiss={() => setActiveEgg(null)}
+        />
+      )}
     </main>
   );
 }

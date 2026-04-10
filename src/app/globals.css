@@ -198,3 +198,77 @@ body::after {
 ::-webkit-scrollbar-thumb:hover { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
 
 ::selection { background: var(--accent); color: #000; }
+
+/* ── Easter Egg Animations ── */
+
+@keyframes egg-scanline-wipe {
+  0%   { clip-path: inset(0 0 100% 0); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { clip-path: inset(0 0 0% 0); opacity: 1; }
+}
+
+@keyframes egg-dissolve-out {
+  0%   { opacity: 1; filter: blur(0px) brightness(1); transform: scale(1); }
+  60%  { opacity: 0.6; filter: blur(2px) brightness(2); transform: scale(1.02); }
+  100% { opacity: 0; filter: blur(12px) brightness(0); transform: scale(0.96); }
+}
+
+@keyframes egg-glitch {
+  0%,100% { transform: translate(0); clip-path: none; }
+  10%  { transform: translate(-3px, 1px) skewX(-1deg); clip-path: inset(10% 0 80% 0); }
+  20%  { transform: translate(3px, -1px) skewX(1deg);  clip-path: inset(60% 0 20% 0); }
+  30%  { transform: translate(0); clip-path: none; }
+  70%  { transform: translate(-2px, 0); clip-path: inset(40% 0 50% 0); }
+  80%  { transform: translate(2px, 1px); clip-path: none; }
+}
+
+@keyframes egg-border-breathe {
+  0%,100% { box-shadow: 0 0 20px rgba(0,255,157,0.3), 0 0 60px rgba(0,255,157,0.1), inset 0 0 30px rgba(0,255,157,0.03); }
+  50%      { box-shadow: 0 0 40px rgba(0,255,157,0.6), 0 0 100px rgba(0,255,157,0.2), inset 0 0 50px rgba(0,255,157,0.06); }
+}
+
+@keyframes egg-hex-float {
+  0%   { transform: translateY(0px)   rotate(0deg);   opacity: 0.08; }
+  50%  { transform: translateY(-30px) rotate(180deg); opacity: 0.18; }
+  100% { transform: translateY(0px)   rotate(360deg); opacity: 0.08; }
+}
+
+@keyframes egg-typewriter-cursor {
+  0%,100% { border-right-color: var(--accent); }
+  50%     { border-right-color: transparent; }
+}
+
+@keyframes egg-rgb-split {
+  0%,100% { text-shadow: -2px 0 #ff3b3b, 2px 0 #00d4ff, 0 0 8px var(--accent); }
+  25%     { text-shadow: 2px 0 #ff3b3b, -2px 0 #00d4ff, 0 0 20px var(--accent); }
+  50%     { text-shadow: -1px 0 #7b2fff, 1px 0 #00ff9d, 0 0 4px var(--accent); }
+  75%     { text-shadow: 1px 0 #ffb300, -1px 0 #ff3b3b, 0 0 12px var(--accent); }
+}
+
+@keyframes egg-matrix-msg-in {
+  0%   { opacity: 0; letter-spacing: 0.8em; filter: blur(8px); }
+  100% { opacity: 1; letter-spacing: 0.15em; filter: blur(0); }
+}
+
+@keyframes egg-konami-title {
+  0%   { transform: scale(0.5) rotate(-5deg); opacity: 0; filter: blur(10px); }
+  60%  { transform: scale(1.08) rotate(1deg); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes egg-particle-rise {
+  0%   { transform: translateY(0) scale(1);   opacity: 0.7; }
+  100% { transform: translateY(-120px) scale(0); opacity: 0; }
+}
+
+@keyframes egg-scanbar {
+  0%   { top: -4px; }
+  100% { top: 100%; }
+}
+
+.egg-wipe-in    { animation: egg-scanline-wipe 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+.egg-wipe-out   { animation: egg-dissolve-out 0.4s ease-in forwards; }
+.egg-glitch     { animation: egg-glitch 0.6s steps(1) infinite; }
+.egg-breathe    { animation: egg-border-breathe 2.5s ease-in-out infinite; }
+.egg-rgb        { animation: egg-rgb-split 1.8s linear infinite; }
+.egg-konami-in  { animation: egg-konami-title 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
