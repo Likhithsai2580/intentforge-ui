@@ -14,6 +14,7 @@ import VideoResults from '@/components/VideoResults';
 import ContentModal from '@/components/ContentModal';
 import Pagination from '@/components/Pagination';
 import BackToTop from '@/components/BackToTop';
+import RetryTerminal from '@/components/RetryTerminal';
 import { searchWeb, searchNews, searchImages, searchVideos } from '@/lib/api';
 import { SearchResult } from '@/types';
 
@@ -40,34 +41,75 @@ export default function SearchContent() {
   const [videoResults, setVideoResults] = useState<{ results: any[]; total: number; latency_ms: number } | null>(null);
   const [selectedContentId, setSelectedContentId] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
+  const [retryAttempt, setRetryAttempt] = useState(0); // 0 = not retrying, 1-3 = retry in progress
+  const [retryQuery, setRetryQuery] = useState('');
   const limit = 15;
+
+  const fetchOnce = useCallback(async (q: string, tab: string, newOffset: number) => {
+    if (tab === 'web') {
+      const res = await searchWeb(q, { limit, offset: newOffset });
+      return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms, message: res.message } };
+    } else if (tab === 'news') {
+      const res = await searchNews(q);
+      return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms, sources: res.sources } };
+    } else if (tab === 'images') {
+      const res = await searchImages(q);
+      return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms } };
+    } else {
+      const res = await searchVideos(q);
+      return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms } };
+    }
+  }, [limit]);
 
   const performSearch = useCallback(async (q: string, tab: string, newOffset = 0) => {
     setLoading(true);
+    setRetryAttempt(0);
     setOffset(newOffset);
     router.push(`/?q=${encodeURIComponent(q)}&tab=${tab}`, { scroll: false });
     setQuery(q);
 
+    const MAX_RETRIES = 3;
+    let attempt = 0;
+
     try {
-      if (tab === 'web') {
-        const res = await searchWeb(q, { limit, offset: newOffset });
-        setWebResults({ results: res.results, total: res.total, latency_ms: res.latency_ms, message: res.message });
-      } else if (tab === 'news') {
-        const res = await searchNews(q);
-        setNewsResults({ results: res.results, total: res.total, latency_ms: res.latency_ms, sources: res.sources });
-      } else if (tab === 'images') {
-        const res = await searchImages(q);
-        setImageResults({ results: res.results, total: res.total, latency_ms: res.latency_ms });
-      } else if (tab === 'videos') {
-        const res = await searchVideos(q);
-        setVideoResults({ results: res.results, total: res.total, latency_ms: res.latency_ms });
+      while (attempt < MAX_RETRIES) {
+        if (attempt > 0) {
+          // show retry terminal animation
+          setLoading(false);
+          setRetryAttempt(attempt);
+          setRetryQuery(q);
+          // wait for the terminal lines to animate before re-fetching
+          await new Promise((r) => setTimeout(r, 2200));
+          setRetryAttempt(0);
+          setLoading(true);
+        }
+
+        const { results, data } = await fetchOnce(q, tab, newOffset);
+
+        if (results.length > 0) {
+          if (tab === 'web') setWebResults(data as typeof webResults);
+          else if (tab === 'news') setNewsResults(data as typeof newsResults);
+          else if (tab === 'images') setImageResults(data as typeof imageResults);
+          else setVideoResults(data as typeof videoResults);
+          return;
+        }
+
+        attempt++;
       }
+
+      // all 3 attempts exhausted — commit empty results
+      const { data } = await fetchOnce(q, tab, newOffset);
+      if (tab === 'web') setWebResults(data as typeof webResults);
+      else if (tab === 'news') setNewsResults(data as typeof newsResults);
+      else if (tab === 'images') setImageResults(data as typeof imageResults);
+      else setVideoResults(data as typeof videoResults);
     } catch (err) {
       console.error('Search error:', err);
     } finally {
       setLoading(false);
+      setRetryAttempt(0);
     }
-  }, [router]);
+  }, [router, fetchOnce]);
 
   const handlePageChange = (page: number) => {
     const newOffset = (page - 1) * limit;
@@ -90,8 +132,8 @@ export default function SearchContent() {
 
   return (
     <main className="min-h-screen bg-[var(--background)] relative flex flex-col">
-      {hasResults || loading ? (
-        <Header query={query} onSearch={handleSearch} isLoading={loading} />
+      {hasResults || loading || retryAttempt > 0 ? (
+        <Header query={query} onSearch={handleSearch} isLoading={loading || retryAttempt > 0} />
       ) : null}
 
       <div className="relative z-20 flex-1 flex flex-col justify-center py-12 md:py-20">
@@ -188,8 +230,13 @@ export default function SearchContent() {
             </div>
           )}
 
+          {/* Retry terminal animation */}
+          {retryAttempt > 0 && (
+            <RetryTerminal attempt={retryAttempt} query={retryQuery} />
+          )}
+
           {/* Loading skeleton */}
-          {loading && (
+          {loading && retryAttempt === 0 && (
             <div className="max-w-5xl mx-auto px-4 py-8 font-mono">
               <p className="text-[var(--muted)] text-xs mb-6 animate-pulse">
                 <span className="text-[var(--accent)]">C:\&gt;</span> executing query... <span className="cursor-blink">_</span>
