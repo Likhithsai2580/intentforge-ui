@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IntentForge by Oxiverse v0.1.2
 
-## Getting Started
+**IntentForge** is a next-generation AI-powered, intent-first search engine built by the **Oxiverse** ecosystem. It is designed to navigate the web, news, images, and videos with deep semantic understanding—moving beyond simple keyword matching to actually understand the true intent behind user queries.
 
-First, run the development server:
+## 🌟 Features
+- **Semantic Search Engine**: Powerful AI synthesis and relevance scoring.
+- **Intent-First Design**: Dedicated landing and search pages optimized for clarity.
+- **Omni-Search Integration**: Web, News, Image, and Video search.
+- **Modern UI Edge**: Light and dark themes leveraging Tailwind CSS v4 and Framer Motion.
+- **SEO Optimized**: Advanced JSON-LD structured data, dynamic OpenGraph, sitemaps, and optimized hidden semantic content for crawlers.
+
+## 🚀 Getting Started
+
+First, install dependencies and run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔍 SEO & Architecture
+The project heavily utilizes Next.js 15 App Router capabilities for Search Engine Optimization:
+- **Global Metadata API** in `layout.tsx` for structured schema and definitions.
+- **Dynamic Crawler Rules**: The `robots.tsx` automatically blocks spammy infinite-crawl queries (e.g., `/?q=`) while retaining priority on the indexable semantic landing pages.
+- **Visually Hidden Content**: Implements `sr-only` microcopy strategies for deep indexing on otherwise sleek, minimalistic query landing pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📜 License
+This project operates under the **Intent Engine Community License (IECL) v1.0**. See documentation for details on non-commercial and commercial usage terms.
