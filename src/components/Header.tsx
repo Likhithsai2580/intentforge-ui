@@ -18,7 +18,7 @@ export default function Header({ query, onSearch, isLoading }: HeaderProps) {
         <div className="flex items-center gap-4 sm:gap-6">
           {/* Logo + Branding */}
           <button
-            onClick={() => window.location.href = '/'}
+            onClick={() => window.location.href = '/classic'}
             className="flex-shrink-0 flex items-center gap-2 group"
           >
             <Image
@@ -56,7 +56,7 @@ export default function Header({ query, onSearch, isLoading }: HeaderProps) {
               [about]
             </a>
             <Link
-              href="/settings"
+              href="/settings?mode=classic"
               className="text-xs font-mono text-[var(--muted)] hover:text-[var(--accent)] transition-colors tracking-wider uppercase"
             >
               [settings]

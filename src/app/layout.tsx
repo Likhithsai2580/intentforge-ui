@@ -168,7 +168,14 @@ export default function RootLayout({
           id="theme-initializer"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `try{document.documentElement.classList.add('dark')}catch(e){}`,
+            __html: `(function(){try{
+  var m=document.cookie.match(/(?:^|; )if_prefs=([^;]*)/);
+  if(m){var p=JSON.parse(decodeURIComponent(m[1]));
+    var t=p.theme;
+    var dark=(t==='dark')||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches);
+    if(dark){document.documentElement.classList.add('if-dark-html');}
+  }
+}catch(e){}})();`,
           }}
         />
       </head>

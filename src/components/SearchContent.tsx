@@ -84,7 +84,7 @@ export default function SearchContent() {
     setLoading(true);
     setRetryAttempt(0);
     setOffset(newOffset);
-    router.push(`/?q=${encodeURIComponent(q)}&tab=${tab}`, { scroll: false });
+    router.push(`/classic?q=${encodeURIComponent(q)}&tab=${tab}`, { scroll: false });
     setQuery(q);
 
     const MAX_RETRIES = 3;
@@ -129,6 +129,14 @@ export default function SearchContent() {
       setRetryAttempt(0);
     }
   }, [router, fetchOnce]);
+
+  // Auto-search when landing with ?q= in the URL
+  useEffect(() => {
+    const q = searchParams.get('q');
+    const tab = searchParams.get('tab') || 'web';
+    if (q) performSearch(q, tab, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlePageChange = (page: number) => {
     const newOffset = (page - 1) * limit;
@@ -188,12 +196,12 @@ export default function SearchContent() {
                   </div>
                   <div className="flex items-center justify-center gap-6 py-4 border-t border-b border-[var(--border)] mx-6 mb-4">
                     <div className="flex flex-col items-center gap-1">
-                      <Image src="/assets/intentforge.JPG" alt="IntentForge" width={40} height={40} className="rounded-sm opacity-90" />
+                      <Image src="/assets/intentforge.JPG" alt="IntentForge" width={48} height={48} className="rounded-md ring-1 ring-[var(--border)]" />
                       <span className="text-[9px] font-mono text-[var(--muted)] tracking-widest uppercase">IntentForge</span>
                     </div>
                     <span className="text-[var(--border)] font-mono text-xl">×</span>
                     <div className="flex flex-col items-center gap-1">
-                      <Image src="/assets/oxiverse.png" alt="Oxiverse" width={40} height={40} className="rounded-full opacity-90" />
+                      <Image src="/assets/oxiverse.png" alt="Oxiverse" width={48} height={48} className="rounded-full ring-1 ring-[var(--border)]" />
                       <span className="text-[9px] font-mono text-[var(--muted)] tracking-widest uppercase">Oxiverse</span>
                     </div>
                   </div>
@@ -216,6 +224,9 @@ export default function SearchContent() {
               <p className="mt-8 text-[10px] font-mono text-[var(--muted)] tracking-widest uppercase">
                 powered by <span className="text-[var(--accent)]">IntentForge</span> // an <span className="text-[var(--terminal-cyan)]">Oxiverse</span> product
               </p>
+              <Link href="/" className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-mono text-[var(--muted)] hover:text-[var(--accent)] transition-colors tracking-widest uppercase border border-[var(--border)] hover:border-[var(--accent)] px-3 py-1.5">
+                ✦ try pro mode
+              </Link>
             </div>
           )}
 
@@ -290,10 +301,10 @@ export default function SearchContent() {
         <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-12 gap-8">
           <div className="md:col-span-5 flex flex-col items-center md:items-start text-center md:text-left">
             <div className="flex items-center gap-3 mb-3">
-              <Image src="/assets/intentforge.JPG" alt="IntentForge" width={24} height={24} className="rounded-sm opacity-80" />
+              <Image src="/assets/intentforge.JPG" alt="IntentForge" width={32} height={32} className="rounded-md ring-1 ring-[var(--border)]" />
               <span className="text-sm font-mono text-[var(--accent)] terminal-glow tracking-wider">INTENTFORGE</span>
               <span className="text-[10px] text-[var(--muted)]">by</span>
-              <Image src="/assets/oxiverse.png" alt="Oxiverse" width={18} height={18} className="rounded-full opacity-80" />
+              <Image src="/assets/oxiverse.png" alt="Oxiverse" width={24} height={24} className="rounded-full ring-1 ring-[var(--border)]" />
               <span className="text-xs font-mono text-[var(--terminal-cyan)]">OXIVERSE</span>
             </div>
             <p className="text-xs text-[var(--muted)] leading-relaxed max-w-sm">
@@ -305,7 +316,7 @@ export default function SearchContent() {
             <h3 className="text-[10px] text-[var(--accent)] uppercase tracking-widest mb-4">// nav</h3>
             <ul className="space-y-3">
               <li><a href="https://oxiverse.com" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">&gt; about</a></li>
-              <li><Link href="/settings" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">&gt; settings</Link></li>
+              <li><Link href="/settings?mode=classic" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">&gt; settings</Link></li>
               <li><a href="https://oxiverse.com/privacy" target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--muted)] hover:text-[var(--accent)] transition-colors">&gt; privacy</a></li>
             </ul>
           </div>
