@@ -588,6 +588,14 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                     <h1 className="text-3xl font-bold if-text">IntentForge <span className="if-accent">Search</span></h1>
                   </div>
                 </div>
+                
+                {/* SEO Invisible Microcopy for Search Engines */}
+                <div className="sr-only pb-4">
+                  <h2>The IntentForge Search Engine by Oxiverse</h2>
+                  <p>
+                    IntentForge is a next-generation AI-powered search engine built by Oxiverse. We specialize in intent-first web search, news search, and image discovery using advanced semantic AI to move beyond traditional keyword matching. Experience the smartest search engine alternative designed for modern discovery.
+                  </p>
+                </div>
                 <p className="text-base if-muted max-w-sm mx-auto leading-relaxed">
                   Intent-first discovery across the web — powered by semantic AI.
                 </p>

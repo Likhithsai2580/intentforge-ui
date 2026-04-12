@@ -43,14 +43,18 @@ export default function About() {
           </div>
 
           <div className="space-y-4 text-xs text-[var(--muted)] leading-relaxed">
+            <h2 className="sr-only">What is the Oxiverse Search Engine?</h2>
             <p>
-              <span className="text-[var(--accent)]">&gt;</span> Oxiverse is a next-generation intent-first search engine designed for effective discovery.
+              <span className="text-[var(--accent)]">&gt;</span> <strong>Oxiverse</strong> is a next-generation intent-first search engine designed for effective discovery. Unlike traditional search engines that rely on simple keyword matching, the Oxiverse ecosystem is built to understand exactly what you are looking for.
             </p>
             <p>
-              <span className="text-[var(--accent)]">&gt;</span> Powered by IntentForge AI — moving beyond keyword matching to true semantic understanding.
+              <span className="text-[var(--accent)]">&gt;</span> <strong>IntentForge AI</strong> is the core engine powering our search results. By leveraging advanced semantic AI, IntentForge answers queries directly by analyzing the context and true intent behind your search, delivering unparalleled accuracy across web, news, images, and video search.
             </p>
             <p>
-              <span className="text-[var(--accent)]">&gt;</span> Built for the decentralized era. Open-source. Intent-driven.
+              <span className="text-[var(--accent)]">&gt;</span> We believe the future of discovery relies on a smarter, decentralized, and intent-driven approach. As a modern AI search engine alternative, IntentForge ensures you find the information that matters, cutting through the noise with deep semantic understanding.
+            </p>
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> Built for the decentralized era. Open-source. Intent-driven. Explore the most advanced semantic search engine on the web today.
             </p>
           </div>
         </div>
