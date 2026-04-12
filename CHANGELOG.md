@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2026-04-12
+
+### Fixed
+- Fixed a layout issue where the search bar submit button was cut off on mobile devices by adding `min-w-0` to the input element and refining container padding.
+- Improved pagination responsiveness on small screens by reducing the maximum number of visible page buttons.
+
 ## [0.1.2] - 2026-04-12
 
 ### Added

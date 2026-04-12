@@ -99,7 +99,7 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
         <motion.div
           animate={{ boxShadow: focused ? '0 0 0 2px rgba(139,92,246,0.5), 0 8px 32px rgba(139,92,246,0.15)' : '0 2px 12px rgba(0,0,0,0.12)' }}
           transition={{ duration: 0.2 }}
-          className={`if-search-bar flex items-center gap-3 ${large ? 'px-5 py-4' : 'px-4 py-3'} rounded-2xl`}
+          className={`if-search-bar flex items-center gap-2 sm:gap-3 ${large ? 'px-4 sm:px-5 py-3 sm:py-4' : 'px-3 sm:px-4 py-2 sm:py-3'} rounded-2xl`}
         >
           <Search className={`flex-shrink-0 if-search-icon ${large ? 'w-5 h-5' : 'w-4 h-4'}`} />
           <input
@@ -110,7 +110,7 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
             onFocus={() => { setFocused(true); if (recents.length > 0) setShowRecents(true); }}
             onBlur={() => setFocused(false)}
             placeholder="Search anything..."
-            className={`flex-1 bg-transparent if-input focus:outline-none ${large ? 'text-base' : 'text-sm'}`}
+            className={`flex-1 min-w-0 bg-transparent if-input focus:outline-none ${large ? 'text-base' : 'text-sm'}`}
           />
           {!value && (
             <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-md if-kbd text-xs flex-shrink-0">
@@ -433,11 +433,11 @@ function RetryIndicator({ attempt, query }: { attempt: number; query: string }) 
 // ── Pagination ─────────────────────────────────────────────────────────────────
 function Pagination({ current, total, onChange }: { current: number; total: number; onChange: (p: number) => void }) {
   if (total <= 1) return null;
-  const pages = Array.from({ length: Math.min(total, 7) }, (_, i) => {
-    if (total <= 7) return i + 1;
-    if (current <= 4) return i + 1;
-    if (current >= total - 3) return total - 6 + i;
-    return current - 3 + i;
+  const pages = Array.from({ length: Math.min(total, 5) }, (_, i) => {
+    if (total <= 5) return i + 1;
+    if (current <= 3) return i + 1;
+    if (current >= total - 2) return total - 4 + i;
+    return current - 2 + i;
   });
   return (
     <div className="flex items-center justify-center gap-1 mt-12">
