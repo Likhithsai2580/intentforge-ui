@@ -6,27 +6,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: BASE_URL,
-      lastModified: new Date(),
-      changeFrequency: "daily",
+      lastModified: new Date("2025-01-01"),
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${BASE_URL}/about`,
-      lastModified: new Date(),
+      lastModified: new Date("2025-01-01"),
       changeFrequency: "monthly",
-      priority: 0.6,
-    },
-    {
-      url: `${BASE_URL}/settings`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
+      priority: 0.7,
     },
     {
       url: `${BASE_URL}/privacy`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
+      lastModified: new Date("2025-01-01"),
+      changeFrequency: "yearly",
       priority: 0.5,
+    },
+    {
+      url: `${BASE_URL}/classic`,
+      lastModified: new Date("2025-01-01"),
+      changeFrequency: "monthly",
+      priority: 0.4,
     },
   ];
 }
