@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 /* Retro Terminal Theme */
@@ -277,79 +278,104 @@ body::after {
 
 /* Light tokens */
 .if-root {
-  --if-bg:            #f5f5f7;
-  --if-surface:       #ffffff;
-  --if-surface-2:     #f0f0f5;
-  --if-border:        rgba(0,0,0,0.08);
-  --if-border-strong: rgba(0,0,0,0.14);
-  --if-text:          #0a0a0f;
-  --if-muted:         #6b7280;
-  --if-muted-dim:     #9ca3af;
-  --if-accent:        #7c3aed;
-  --if-accent-2:      #6d28d9;
-  --if-accent-light:  rgba(124,58,237,0.08);
-  --if-accent-glow:   rgba(124,58,237,0.25);
-  --if-ai-bg:         rgba(124,58,237,0.05);
-  --if-ai-border:     rgba(124,58,237,0.18);
+  --if-bg:            #f8fafc;
+  --if-surface:       rgba(255, 255, 255, 0.85);
+  --if-surface-2:     #f1f5f9;
+  --if-border:        rgba(0, 0, 0, 0.05);
+  --if-border-strong: rgba(0, 0, 0, 0.1);
+  --if-text:          #0f172a;
+  --if-muted:         #64748b;
+  --if-muted-dim:     #94a3b8;
+  --if-accent:        #8b5cf6;
+  --if-accent-2:      #7c3aed;
+  --if-accent-light:  rgba(139, 92, 246, 0.08);
+  --if-accent-glow:   rgba(139, 92, 246, 0.2);
+  --if-ai-bg:         rgba(139, 92, 246, 0.04);
+  --if-ai-border:     rgba(139, 92, 246, 0.15);
   --if-ai-text:       #5b21b6;
-  --if-danger:        #dc2626;
-  --if-glass:         rgba(255,255,255,0.72);
-  --if-glass-border:  rgba(255,255,255,0.5);
-  --if-shadow-sm:     0 1px 4px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --if-shadow-md:     0 4px 20px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
-  --if-shadow-lg:     0 12px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
-  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 8px 32px rgba(124,58,237,0.12);
-  --if-glow-tl-color: rgba(124,58,237,0.12);
-  --if-glow-br-color: rgba(59,130,246,0.08);
+  --if-danger:        #ef4444;
+  --if-glass:         rgba(255, 255, 255, 0.7);
+  --if-glass-border:  rgba(255, 255, 255, 0.4);
+  --if-shadow-sm:     0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 4px -1px rgba(0, 0, 0, 0.03);
+  --if-shadow-md:     0 12px 24px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
+  --if-shadow-lg:     0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.06);
+  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 12px 32px -8px rgba(139, 92, 246, 0.25);
+  --if-glow-tl-color: rgba(139, 92, 246, 0.15);
+  --if-glow-br-color: rgba(56, 189, 248, 0.12);
 
   background: var(--if-bg);
   color: var(--if-text);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Outfit', 'Inter', var(--font-geist-sans), system-ui, sans-serif;
   position: relative;
+  overflow-x: hidden;
+}
+
+.if-root * {
+  font-family: inherit;
 }
 
 /* Dark tokens */
 .if-root.if-dark {
-  --if-bg:            #0c0c10;
-  --if-surface:       #131318;
-  --if-surface-2:     #1a1a22;
-  --if-border:        rgba(255,255,255,0.07);
-  --if-border-strong: rgba(255,255,255,0.12);
-  --if-text:          #f0f0f5;
-  --if-muted:         #8b8b9e;
-  --if-muted-dim:     #6b6b7e;
+  --if-bg:            #020617;
+  --if-surface:       rgba(15, 23, 42, 0.7);
+  --if-surface-2:     #1e293b;
+  --if-border:        rgba(255, 255, 255, 0.04);
+  --if-border-strong: rgba(255, 255, 255, 0.08);
+  --if-text:          #f8fafc;
+  --if-muted:         #94a3b8;
+  --if-muted-dim:     #64748b;
   --if-accent:        #a78bfa;
-  --if-accent-2:      #8b5cf6;
-  --if-accent-light:  rgba(167,139,250,0.1);
-  --if-accent-glow:   rgba(167,139,250,0.3);
-  --if-ai-bg:         rgba(167,139,250,0.07);
-  --if-ai-border:     rgba(167,139,250,0.2);
-  --if-ai-text:       #c4b5fd;
+  --if-accent-2:      #c4b5fd;
+  --if-accent-light:  rgba(167, 139, 250, 0.1);
+  --if-accent-glow:   rgba(167, 139, 250, 0.3);
+  --if-ai-bg:         rgba(167, 139, 250, 0.05);
+  --if-ai-border:     rgba(167, 139, 250, 0.2);
+  --if-ai-text:       #ddd6fe;
   --if-danger:        #f87171;
-  --if-glass:         rgba(19,19,24,0.8);
-  --if-glass-border:  rgba(255,255,255,0.06);
-  --if-shadow-sm:     0 1px 4px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
-  --if-shadow-md:     0 4px 20px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.3);
-  --if-shadow-lg:     0 12px 48px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.4);
-  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 8px 32px rgba(167,139,250,0.15);
-  --if-glow-tl-color: rgba(124,58,237,0.18);
-  --if-glow-br-color: rgba(59,130,246,0.12);
+  --if-glass:         rgba(15, 23, 42, 0.6);
+  --if-glass-border:  rgba(255, 255, 255, 0.04);
+  --if-shadow-sm:     0 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --if-shadow-md:     0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  --if-shadow-lg:     0 32px 64px -16px rgba(0, 0, 0, 0.8);
+  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 16px 48px -12px rgba(167, 139, 250, 0.25);
+  --if-glow-tl-color: rgba(139, 92, 246, 0.2);
+  --if-glow-br-color: rgba(56, 189, 248, 0.15);
 }
 
 /* Suppress CRT effects inside if-root */
 .if-root ~ body::before,
 .if-root ~ body::after { display: none; }
 
-/* Mesh background glows */
+/* Mesh background glows with animation */
+@keyframes if-float-glow {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(5%, 10%) scale(1.1); }
+  66% { transform: translate(-5%, 5%) scale(0.9); }
+}
+
 .if-root .if-glow-tl {
-  position: fixed; top: -20%; left: -10%; width: 60vw; height: 60vh;
-  background: radial-gradient(ellipse at center, var(--if-glow-tl-color), transparent 70%);
+  position: fixed; top: -15%; left: -10%; width: 70vw; height: 70vh;
+  background: radial-gradient(circle at center, var(--if-glow-tl-color), transparent 70%);
   pointer-events: none; z-index: 0;
+  filter: blur(80px);
+  animation: if-float-glow 20s ease-in-out infinite;
 }
 .if-root .if-glow-br {
-  position: fixed; bottom: -20%; right: -10%; width: 50vw; height: 50vh;
-  background: radial-gradient(ellipse at center, var(--if-glow-br-color), transparent 70%);
+  position: fixed; bottom: -15%; right: -10%; width: 60vw; height: 60vh;
+  background: radial-gradient(circle at center, var(--if-glow-br-color), transparent 70%);
   pointer-events: none; z-index: 0;
+  filter: blur(80px);
+  animation: if-float-glow 25s ease-in-out infinite reverse;
+}
+
+.if-root .if-mesh-bg {
+  position: fixed; inset: 0;
+  background-image: radial-gradient(circle at 2px 2px, var(--if-border-strong) 1px, transparent 0);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* ── Text helpers ── */
@@ -372,8 +398,17 @@ body::after {
 /* ── Search bar ── */
 .if-root .if-search-bar {
   background: var(--if-surface);
-  border: 1.5px solid var(--if-border-strong);
-  box-shadow: var(--if-shadow-sm);
+  border: 1px solid var(--if-glass-border);
+  box-shadow: var(--if-shadow-md);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.if-root .if-search-bar:focus-within {
+  transform: translateY(-2px);
+  box-shadow: var(--if-shadow-glow);
+  border-color: var(--if-accent);
 }
 .if-root .if-search-icon { color: var(--if-muted); }
 .if-root .if-input { color: var(--if-text); }
@@ -436,8 +471,10 @@ body::after {
 /* ── AI Insight Panel ── */
 .if-root .if-ai-panel {
   background: var(--if-ai-bg);
-  border: 1.5px solid var(--if-ai-border);
-  backdrop-filter: blur(8px);
+  border: 1px solid var(--if-ai-border);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: inset 0 0 20px var(--if-accent-glow);
 }
 .if-root .if-ai-icon {
   background: var(--if-accent-light);
@@ -454,13 +491,17 @@ body::after {
 
 /* ── Result cards ── */
 .if-root .if-result-card {
-  border: 1.5px solid transparent;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  background: transparent;
 }
 .if-root .if-result-card:hover {
   background: var(--if-surface);
-  border-color: var(--if-border-strong);
+  border-color: var(--if-glass-border);
   box-shadow: var(--if-shadow-md);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translateY(-2px);
 }
 .if-root .if-favicon-bg { background: var(--if-surface-2); border: 1px solid var(--if-border); }
 .if-root .if-badge {
@@ -897,4 +938,4 @@ body::after {
 
 /* ── Theme init — applied by the beforeInteractive script ── */
 /* When the html element has if-dark-html, force if-root children into dark mode */
-html.if-dark-html .if-root { --if-bg: #0c0c10; --if-surface: #131318; --if-surface-2: #1a1a22; --if-border: rgba(255,255,255,0.07); --if-border-strong: rgba(255,255,255,0.12); --if-text: #f0f0f5; --if-muted: #8b8b9e; --if-muted-dim: #6b6b7e; --if-accent: #a78bfa; --if-accent-2: #8b5cf6; --if-accent-light: rgba(167,139,250,0.1); --if-accent-glow: rgba(167,139,250,0.3); --if-ai-bg: rgba(167,139,250,0.07); --if-ai-border: rgba(167,139,250,0.2); --if-ai-text: #c4b5fd; --if-glass: rgba(19,19,24,0.8); --if-glass-border: rgba(255,255,255,0.06); --if-shadow-sm: 0 1px 4px rgba(0,0,0,0.3); --if-shadow-md: 0 4px 20px rgba(0,0,0,0.4); --if-shadow-lg: 0 12px 48px rgba(0,0,0,0.5); --if-shadow-glow: 0 0 0 3px rgba(167,139,250,0.3), 0 8px 32px rgba(167,139,250,0.15); --if-glow-tl-color: rgba(124,58,237,0.18); --if-glow-br-color: rgba(59,130,246,0.12); background: var(--if-bg); color: var(--if-text); }
+html.if-dark-html .if-root { --if-bg: #020617; --if-surface: rgba(15, 23, 42, 0.7); --if-surface-2: #1e293b; --if-border: rgba(255, 255, 255, 0.04); --if-border-strong: rgba(255, 255, 255, 0.08); --if-text: #f8fafc; --if-muted: #94a3b8; --if-muted-dim: #64748b; --if-accent: #a78bfa; --if-accent-2: #c4b5fd; --if-accent-light: rgba(167, 139, 250, 0.1); --if-accent-glow: rgba(167, 139, 250, 0.3); --if-ai-bg: rgba(167, 139, 250, 0.05); --if-ai-border: rgba(167, 139, 250, 0.2); --if-ai-text: #ddd6fe; --if-glass: rgba(15, 23, 42, 0.6); --if-glass-border: rgba(255, 255, 255, 0.04); --if-shadow-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.4); --if-shadow-md: 0 12px 32px -8px rgba(0, 0, 0, 0.6); --if-shadow-lg: 0 32px 64px -16px rgba(0, 0, 0, 0.8); --if-shadow-glow: 0 0 0 3px rgba(167, 139, 250, 0.3), 0 16px 48px -12px rgba(167, 139, 250, 0.25); --if-glow-tl-color: rgba(139, 92, 246, 0.2); --if-glow-br-color: rgba(56, 189, 248, 0.15); background: var(--if-bg); color: var(--if-text); }

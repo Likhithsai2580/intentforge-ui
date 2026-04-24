@@ -532,7 +532,8 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
   return (
     <div className={`if-root min-h-screen flex flex-col${dark ? ' if-dark' : ''}`}>
 
-      {/* Mesh background glows */}
+      {/* Mesh background and glows */}
+      <div className="if-mesh-bg" aria-hidden />
       <div className="if-glow-tl" aria-hidden />
       <div className="if-glow-br" aria-hidden />
 
@@ -579,13 +580,23 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
               className="flex flex-col items-center justify-center min-h-[82vh] px-4 py-16">
 
               <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.4 }} className="text-center mb-10">
-                <div className="flex items-center justify-center gap-3 mb-5">
-                  <Image src="/assets/intentforge.JPG" alt="IntentForge" width={52} height={52}
-                    className="rounded-2xl shadow-xl" />
-                  <div className="text-left">
-                    <p className="text-xs if-muted font-medium tracking-widest uppercase">Oxiverse</p>
-                    <h1 className="text-3xl font-bold if-text">IntentForge <span className="if-accent">Search</span></h1>
+                transition={{ delay: 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }} className="text-center mb-12">
+                <div className="flex flex-col items-center justify-center gap-6 mb-8">
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.2, duration: 0.6 }}
+                    className="relative"
+                  >
+                    <div className="absolute inset-0 bg-violet-500 blur-2xl opacity-20 scale-150" />
+                    <Image src="/assets/intentforge.JPG" alt="IntentForge" width={80} height={80}
+                      className="rounded-3xl shadow-2xl relative z-10 border-2 border-white/10" />
+                  </motion.div>
+                  <div className="space-y-2">
+                    <p className="text-sm if-muted font-semibold tracking-[0.3em] uppercase opacity-80">Oxiverse Ecosystem</p>
+                    <h1 className="text-5xl sm:text-6xl font-extrabold if-text tracking-tight">
+                      IntentForge <span className="bg-gradient-to-r from-violet-500 to-sky-400 bg-clip-text text-transparent">Search</span>
+                    </h1>
                   </div>
                 </div>
                 
@@ -596,22 +607,23 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                     IntentForge is a next-generation AI-powered search engine built by Oxiverse. We specialize in intent-first web search, news search, and image discovery using advanced semantic AI to move beyond traditional keyword matching. Experience the smartest search engine alternative designed for modern discovery.
                   </p>
                 </div>
-                <p className="text-base if-muted max-w-sm mx-auto leading-relaxed">
-                  Intent-first discovery across the web — powered by semantic AI.
+                <p className="text-lg if-muted max-w-lg mx-auto leading-relaxed font-medium">
+                  The future of discovery. Experience intent-first search powered by state-of-the-art semantic AI.
                 </p>
               </motion.div>
 
               <SearchBar value={query} onChange={setQuery} onSubmit={handleSearch} isLoading={loading} large />
 
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
-                className="flex flex-wrap items-center justify-center gap-2 mt-8 max-w-lg">
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
+                className="flex flex-wrap items-center justify-center gap-3 mt-10 max-w-2xl">
                 {SUGGESTIONS.map((s, i) => (
                   <motion.button key={s}
-                    initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.35 + i * 0.05 }}
-                    whileHover={{ scale: 1.04, y: -1 }}
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + i * 0.05, duration: 0.4 }}
+                    whileHover={{ scale: 1.05, y: -2, transition: { duration: 0.2 } }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={() => { setQuery(s); performSearch(s, activeTab, 0); }}
-                    className="if-pill px-4 py-2 rounded-full text-sm transition-all">
+                    className="if-pill px-5 py-2.5 rounded-2xl text-sm font-medium transition-all">
                     {s}
                   </motion.button>
                 ))}
