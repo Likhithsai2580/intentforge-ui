@@ -86,15 +86,7 @@ body::before {
   z-index: 9999;
 }
 
-/* CRT vignette */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%);
-  pointer-events: none;
-  z-index: 9998;
-}
+/* CRT vignette removed */
 
 /* Terminal text glow */
 .terminal-glow {
@@ -278,30 +270,30 @@ body::after {
 
 /* Light tokens */
 .if-root {
-  --if-bg:            #f8fafc;
-  --if-surface:       rgba(255, 255, 255, 0.85);
+  --if-bg:            #ffffff;
+  --if-surface:       rgba(255, 255, 255, 0.9);
   --if-surface-2:     #f1f5f9;
-  --if-border:        rgba(0, 0, 0, 0.05);
-  --if-border-strong: rgba(0, 0, 0, 0.1);
+  --if-border:        rgba(15, 23, 42, 0.08);
+  --if-border-strong: rgba(15, 23, 42, 0.12);
   --if-text:          #0f172a;
-  --if-muted:         #64748b;
-  --if-muted-dim:     #94a3b8;
-  --if-accent:        #8b5cf6;
-  --if-accent-2:      #7c3aed;
-  --if-accent-light:  rgba(139, 92, 246, 0.08);
-  --if-accent-glow:   rgba(139, 92, 246, 0.2);
-  --if-ai-bg:         rgba(139, 92, 246, 0.04);
-  --if-ai-border:     rgba(139, 92, 246, 0.15);
-  --if-ai-text:       #5b21b6;
+  --if-muted:         #475569;
+  --if-muted-dim:     #64748b;
+  --if-accent:        #6366f1;
+  --if-accent-2:      #4f46e5;
+  --if-accent-light:  rgba(99, 102, 241, 0.08);
+  --if-accent-glow:   rgba(99, 102, 241, 0.15);
+  --if-ai-bg:         rgba(99, 102, 241, 0.04);
+  --if-ai-border:     rgba(99, 102, 241, 0.15);
+  --if-ai-text:       #3730a3;
   --if-danger:        #ef4444;
-  --if-glass:         rgba(255, 255, 255, 0.7);
-  --if-glass-border:  rgba(255, 255, 255, 0.4);
-  --if-shadow-sm:     0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 4px -1px rgba(0, 0, 0, 0.03);
-  --if-shadow-md:     0 12px 24px -8px rgba(0, 0, 0, 0.08), 0 4px 12px -4px rgba(0, 0, 0, 0.04);
-  --if-shadow-lg:     0 24px 48px -12px rgba(0, 0, 0, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.06);
-  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 12px 32px -8px rgba(139, 92, 246, 0.25);
-  --if-glow-tl-color: rgba(139, 92, 246, 0.15);
-  --if-glow-br-color: rgba(56, 189, 248, 0.12);
+  --if-glass:         rgba(255, 255, 255, 0.85);
+  --if-glass-border:  rgba(255, 255, 255, 0.6);
+  --if-shadow-sm:     0 2px 8px -2px rgba(15, 23, 42, 0.05), 0 1px 4px -1px rgba(15, 23, 42, 0.03);
+  --if-shadow-md:     0 12px 24px -8px rgba(15, 23, 42, 0.08), 0 4px 12px -4px rgba(15, 23, 42, 0.04);
+  --if-shadow-lg:     0 24px 48px -12px rgba(15, 23, 42, 0.12), 0 8px 24px -8px rgba(15, 23, 42, 0.06);
+  --if-shadow-glow:   0 0 0 4px var(--if-accent-glow), 0 16px 32px -8px rgba(99, 102, 241, 0.2);
+  --if-glow-tl-color: rgba(99, 102, 241, 0.12);
+  --if-glow-br-color: rgba(14, 165, 233, 0.1);
 
   background: var(--if-bg);
   color: var(--if-text);
@@ -317,29 +309,29 @@ body::after {
 /* Dark tokens */
 .if-root.if-dark {
   --if-bg:            #020617;
-  --if-surface:       rgba(15, 23, 42, 0.7);
+  --if-surface:       rgba(15, 23, 42, 0.8);
   --if-surface-2:     #1e293b;
-  --if-border:        rgba(255, 255, 255, 0.04);
-  --if-border-strong: rgba(255, 255, 255, 0.08);
+  --if-border:        rgba(255, 255, 255, 0.06);
+  --if-border-strong: rgba(255, 255, 255, 0.1);
   --if-text:          #f8fafc;
   --if-muted:         #94a3b8;
   --if-muted-dim:     #64748b;
-  --if-accent:        #a78bfa;
-  --if-accent-2:      #c4b5fd;
-  --if-accent-light:  rgba(167, 139, 250, 0.1);
-  --if-accent-glow:   rgba(167, 139, 250, 0.3);
-  --if-ai-bg:         rgba(167, 139, 250, 0.05);
-  --if-ai-border:     rgba(167, 139, 250, 0.2);
-  --if-ai-text:       #ddd6fe;
+  --if-accent:        #818cf8;
+  --if-accent-2:      #a5b4fc;
+  --if-accent-light:  rgba(129, 140, 248, 0.1);
+  --if-accent-glow:   rgba(129, 140, 248, 0.2);
+  --if-ai-bg:         rgba(129, 140, 248, 0.05);
+  --if-ai-border:     rgba(129, 140, 248, 0.2);
+  --if-ai-text:       #e0e7ff;
   --if-danger:        #f87171;
-  --if-glass:         rgba(15, 23, 42, 0.6);
-  --if-glass-border:  rgba(255, 255, 255, 0.04);
+  --if-glass:         rgba(15, 23, 42, 0.8);
+  --if-glass-border:  rgba(255, 255, 255, 0.05);
   --if-shadow-sm:     0 4px 12px -2px rgba(0, 0, 0, 0.4);
   --if-shadow-md:     0 12px 32px -8px rgba(0, 0, 0, 0.6);
   --if-shadow-lg:     0 32px 64px -16px rgba(0, 0, 0, 0.8);
-  --if-shadow-glow:   0 0 0 3px var(--if-accent-glow), 0 16px 48px -12px rgba(167, 139, 250, 0.25);
-  --if-glow-tl-color: rgba(139, 92, 246, 0.2);
-  --if-glow-br-color: rgba(56, 189, 248, 0.15);
+  --if-shadow-glow:   0 0 0 4px var(--if-accent-glow), 0 16px 48px -12px rgba(129, 140, 248, 0.3);
+  --if-glow-tl-color: rgba(99, 102, 241, 0.15);
+  --if-glow-br-color: rgba(14, 165, 233, 0.12);
 }
 
 /* Suppress CRT effects inside if-root */
@@ -372,7 +364,6 @@ body::after {
   position: fixed; inset: 0;
   background-image: radial-gradient(circle at 2px 2px, var(--if-border-strong) 1px, transparent 0);
   background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
   opacity: 0.15;
   pointer-events: none;
   z-index: 0;
@@ -424,10 +415,19 @@ body::after {
 .if-root .if-icon-btn:hover { background: var(--if-surface-2); color: var(--if-text); }
 .if-root .if-search-submit {
   background: var(--if-accent);
-  color: #fff;
-  border-radius: 10px;
+  color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
-.if-root .if-search-submit:hover:not(:disabled) { background: var(--if-accent-2); }
+.if-root .if-search-submit:hover:not(:disabled) {
+  background: var(--if-accent-2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+}
+.if-root .if-search-submit:active:not(:disabled) {
+  transform: translateY(0);
+}
 .if-root .if-spinner {
   border-color: var(--if-border-strong);
   border-top-color: var(--if-accent);
@@ -451,15 +451,17 @@ body::after {
 /* ── Landing pills ── */
 .if-root .if-pill {
   background: var(--if-surface);
-  border: 1.5px solid var(--if-border-strong);
+  border: 1px solid var(--if-border-strong);
   color: var(--if-muted);
   box-shadow: var(--if-shadow-sm);
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 .if-root .if-pill:hover {
   border-color: var(--if-accent);
   color: var(--if-accent);
   background: var(--if-accent-light);
-  box-shadow: 0 0 12px var(--if-accent-glow);
+  box-shadow: 0 4px 12px var(--if-accent-glow);
+  transform: translateY(-1px);
 }
 
 /* ── Tabs ── */
@@ -506,8 +508,9 @@ body::after {
 .if-root .if-favicon-bg { background: var(--if-surface-2); border: 1px solid var(--if-border); }
 .if-root .if-badge {
   background: var(--if-surface-2);
-  color: var(--if-muted-dim);
-  border: 1px solid var(--if-border);
+  color: var(--if-muted);
+  border: 1px solid var(--if-border-strong);
+  font-weight: 500;
 }
 .if-root .if-relevance-track { background: var(--if-border-strong); }
 .if-root .if-relevance-fill  { background: var(--if-accent); }

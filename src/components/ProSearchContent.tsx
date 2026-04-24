@@ -97,11 +97,17 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
     <div ref={wrapperRef} className={`relative w-full ${large ? 'max-w-2xl' : 'max-w-xl'}`}>
       <form onSubmit={e => { e.preventDefault(); submit(value); }}>
         <motion.div
-          animate={{ boxShadow: focused ? '0 0 0 2px rgba(139,92,246,0.5), 0 8px 32px rgba(139,92,246,0.15)' : '0 2px 12px rgba(0,0,0,0.12)' }}
-          transition={{ duration: 0.2 }}
-          className={`if-search-bar flex items-center gap-2 sm:gap-3 ${large ? 'px-4 sm:px-5 py-3 sm:py-4' : 'px-3 sm:px-4 py-2 sm:py-3'} rounded-2xl`}
+          animate={{ 
+            boxShadow: focused 
+              ? 'var(--if-shadow-glow)' 
+              : 'var(--if-shadow-md)',
+            scale: focused ? 1.01 : 1,
+            borderColor: focused ? 'var(--if-accent)' : 'var(--if-glass-border)'
+          }}
+          transition={{ duration: 0.2, ease: [0.2, 0, 0, 1] }}
+          className={`if-search-bar flex items-center gap-2 sm:gap-3 border ${large ? 'px-4 sm:px-6 py-3 sm:py-5' : 'px-3 sm:px-4 py-2 sm:py-3'} rounded-2xl`}
         >
-          <Search className={`flex-shrink-0 if-search-icon ${large ? 'w-5 h-5' : 'w-4 h-4'}`} />
+          <Search className={`flex-shrink-0 if-search-icon ${large ? 'w-6 h-6' : 'w-4 h-4'}`} />
           <input
             ref={inputRef}
             type="text"
@@ -110,7 +116,7 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
             onFocus={() => { setFocused(true); if (recents.length > 0) setShowRecents(true); }}
             onBlur={() => setFocused(false)}
             placeholder="Search anything..."
-            className={`flex-1 min-w-0 bg-transparent if-input focus:outline-none ${large ? 'text-base' : 'text-sm'}`}
+            className={`flex-1 min-w-0 bg-transparent if-input focus:outline-none ${large ? 'text-lg' : 'text-sm'}`}
           />
           {!value && (
             <kbd className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-md if-kbd text-xs flex-shrink-0">
@@ -126,7 +132,7 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
             <div className="if-spinner w-5 h-5 rounded-full border-2 flex-shrink-0" />
           ) : (
             <button type="submit" disabled={!value.trim()}
-              className="if-search-submit px-4 py-1.5 rounded-xl text-sm font-semibold flex-shrink-0 disabled:opacity-40 transition-all">
+              className={`if-search-submit rounded-xl font-bold flex-shrink-0 disabled:opacity-40 transition-all ${large ? 'px-8 py-3 text-base' : 'px-4 py-1.5 text-sm'}`}>
               Search
             </button>
           )}
@@ -157,35 +163,105 @@ function SearchBar({ value, onChange, onSubmit, isLoading, large = false }: {
 }
 
 // ── Skeleton ───────────────────────────────────────────────────────────────────
-function Skeleton() {
+function Skeleton({ tab }: { tab: Tab }) {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.04 }
+    }
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0 }
+  };
+
+  const randW = (base: number, range: number) => `${base + Math.floor(Math.random() * range)}%`;
+
   return (
-    <div className="space-y-2 mt-6">
-      {/* AI panel skeleton */}
-      <div className="if-ai-panel rounded-2xl p-5 mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="if-skel w-4 h-4 rounded-full" />
-          <div className="if-skel h-3 w-24 rounded-full" />
-        </div>
-        <div className="space-y-2">
-          <div className="if-skel h-3 w-full rounded-full" />
-          <div className="if-skel h-3 w-4/5 rounded-full" />
-          <div className="if-skel h-3 w-3/5 rounded-full" />
-        </div>
-      </div>
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className="if-result-card p-5 rounded-2xl">
-          <div className="flex gap-3">
-            <div className="if-skel w-5 h-5 rounded-lg flex-shrink-0 mt-0.5" />
-            <div className="flex-1 space-y-2.5">
-              <div className="if-skel h-3 w-28 rounded-full" />
-              <div className="if-skel h-5 w-3/4 rounded-lg" />
-              <div className="if-skel h-3 w-full rounded-full" />
-              <div className="if-skel h-3 w-2/3 rounded-full" />
+    <motion.div 
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="w-full"
+    >
+      {tab === 'web' && (
+        <div className="max-w-3xl space-y-4">
+          <motion.div variants={item} className="if-ai-panel rounded-2xl p-6 mb-8 relative overflow-hidden">
+            <div className="absolute inset-0 if-skel opacity-20" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="if-skel w-5 h-5 rounded-lg" />
+                <div className="if-skel h-3 w-32 rounded-full" />
+              </div>
+              <div className="space-y-3">
+                <div className="if-skel h-3 w-full rounded-full" />
+                <div className="if-skel h-3 w-5/6 rounded-full" />
+                <div className="if-skel h-3 w-2/3 rounded-full" />
+              </div>
             </div>
-          </div>
+          </motion.div>
+          {[...Array(6)].map((_, i) => (
+            <motion.div key={i} variants={item} className="if-result-card p-5 rounded-2xl border border-transparent">
+              <div className="flex gap-4">
+                <div className="if-skel w-6 h-6 rounded-lg flex-shrink-0 mt-0.5" />
+                <div className="flex-1 space-y-3">
+                  <div className="if-skel h-2.5 w-32 rounded-full" />
+                  <div className="if-skel h-5 rounded-lg" style={{ width: randW(40, 40) }} />
+                  <div className="space-y-2">
+                    <div className="if-skel h-3 w-full rounded-full" />
+                    <div className="if-skel h-3 rounded-full" style={{ width: randW(60, 30) }} />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+
+      {tab === 'news' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {[...Array(6)].map((_, i) => (
+            <motion.div key={i} variants={item} className="if-news-card rounded-2xl overflow-hidden h-80">
+              <div className="if-skel h-44 w-full" />
+              <div className="p-4 space-y-3">
+                <div className="flex gap-2">
+                  <div className="if-skel h-4 w-16 rounded-full" />
+                  <div className="if-skel h-4 w-20 rounded-full" />
+                </div>
+                <div className="if-skel h-5 w-full rounded-lg" />
+                <div className="if-skel h-3 rounded-full" style={{ width: randW(50, 40) }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'images' && (
+        <div className="columns-2 sm:columns-3 md:columns-4 gap-3 space-y-3">
+          {[...Array(12)].map((_, i) => (
+            <motion.div key={i} variants={item} className="if-image-card rounded-xl overflow-hidden break-inside-avoid">
+              <div className="if-skel w-full" style={{ height: [140, 200, 160, 240, 180][i % 5] }} />
+            </motion.div>
+          ))}
+        </div>
+      )}
+
+      {tab === 'videos' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {[...Array(8)].map((_, i) => (
+            <motion.div key={i} variants={item} className="if-video-card rounded-2xl overflow-hidden">
+              <div className="if-skel aspect-video w-full" />
+              <div className="p-3 space-y-2">
+                <div className="if-skel h-4 w-full rounded-lg" />
+                <div className="if-skel h-3 rounded-full" style={{ width: randW(40, 50) }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </motion.div>
   );
 }
 
@@ -261,9 +337,9 @@ function WebResults({ results, total, latency_ms }: { results: SearchResult[]; t
                   <span className="if-badge text-xs px-2 py-0.5 rounded-full">{r.category}</span>
                   <div className="flex items-center gap-1.5 ml-auto">
                     <div className="if-relevance-track w-12 h-1 rounded-full overflow-hidden">
-                      <div className="if-relevance-fill h-full rounded-full" style={{ width: `${r.relevance_score * 100}%` }} />
+                      <div className="if-relevance-fill h-full rounded-full" style={{ width: `${Math.min(r.relevance_score * 100, 100)}%` }} />
                     </div>
-                    <span className="text-xs if-muted-dim">{(r.relevance_score * 100).toFixed(0)}%</span>
+                    <span className="text-xs font-medium if-muted">{Math.min(r.relevance_score * 100, 100).toFixed(0)}%</span>
                   </div>
                   <a href={r.url} target="_blank" rel="noopener noreferrer"
                     className="opacity-0 group-hover:opacity-100 if-ext-btn p-1 rounded-lg transition-all ml-1">
@@ -408,22 +484,36 @@ function RetryIndicator({ attempt, query }: { attempt: number; query: string }) 
   const labels = ['Expanding search scope...', 'Trying semantic fallback...', 'Last resort — deep search...'];
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-      className="flex flex-col items-center justify-center py-32 gap-6">
-      <div className="relative w-16 h-16">
-        <div className="if-retry-ring absolute inset-0 rounded-full border-4" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Zap className="w-6 h-6 if-accent" />
+      className="flex flex-col items-center justify-center py-40 gap-8">
+      <div className="relative">
+        <div className="absolute inset-0 bg-indigo-500/20 blur-3xl scale-150 animate-pulse" />
+        <div className="relative w-20 h-20">
+          <div className="if-retry-ring absolute inset-0 rounded-full border-[3px] opacity-20" />
+          <motion.div 
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            className="absolute inset-0 rounded-full border-[3px] border-transparent border-t-indigo-500"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Zap className="w-8 h-8 if-accent" fill="currentColor" />
+          </div>
         </div>
       </div>
-      <div className="text-center">
-        <p className="text-base font-semibold if-text mb-1">{labels[Math.min(attempt - 1, 2)]}</p>
-        <p className="text-sm if-muted">Searching for &ldquo;<span className="if-text">{query}</span>&rdquo;</p>
+      <div className="text-center space-y-2">
+        <p className="text-lg font-bold if-text tracking-tight">{labels[Math.min(attempt - 1, 2)]}</p>
+        <p className="text-sm if-muted font-medium px-4 py-1 rounded-full if-surface border if-border mx-auto inline-block">
+          Query: &ldquo;<span className="if-text">{query}</span>&rdquo;
+        </p>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         {[1,2,3].map(n => (
-          <motion.div key={n} className={`h-1.5 w-12 rounded-full ${n <= attempt ? 'if-retry-active' : 'if-retry-pending'}`}
-            animate={n === attempt ? { opacity: [0.5, 1, 0.5] } : {}}
-            transition={{ repeat: Infinity, duration: 1 }} />
+          <div key={n} className="relative h-1.5 w-16 rounded-full overflow-hidden if-surface-2 border if-border">
+            <motion.div 
+              className={`absolute inset-0 ${n <= attempt ? 'if-retry-active' : 'bg-transparent'}`}
+              animate={n === attempt ? { x: ["-100%", "100%"] } : {}}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+            />
+          </div>
         ))}
       </div>
     </motion.div>
@@ -592,10 +682,10 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                     <Image src="/assets/intentforge.JPG" alt="IntentForge" width={80} height={80}
                       className="rounded-3xl shadow-2xl relative z-10 border-2 border-white/10" />
                   </motion.div>
-                  <div className="space-y-2">
-                    <p className="text-sm if-muted font-semibold tracking-[0.3em] uppercase opacity-80">Oxiverse Ecosystem</p>
-                    <h1 className="text-5xl sm:text-6xl font-extrabold if-text tracking-tight">
-                      IntentForge <span className="bg-gradient-to-r from-violet-500 to-sky-400 bg-clip-text text-transparent">Search</span>
+                  <div className="space-y-3">
+                    <p className="text-xs if-muted font-bold tracking-[0.4em] uppercase opacity-70">Oxiverse Ecosystem</p>
+                    <h1 className="text-6xl sm:text-7xl font-extrabold if-text tracking-tight leading-[1.1]">
+                      IntentForge <span className="bg-gradient-to-br from-indigo-500 via-purple-500 to-sky-400 bg-clip-text text-transparent">Search</span>
                     </h1>
                   </div>
                 </div>
@@ -607,7 +697,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                     IntentForge is a next-generation AI-powered search engine built by Oxiverse. We specialize in intent-first web search, news search, and image discovery using advanced semantic AI to move beyond traditional keyword matching. Experience the smartest search engine alternative designed for modern discovery.
                   </p>
                 </div>
-                <p className="text-lg if-muted max-w-lg mx-auto leading-relaxed font-medium">
+                <p className="text-xl if-muted max-w-xl mx-auto leading-relaxed font-medium">
                   The future of discovery. Experience intent-first search powered by state-of-the-art semantic AI.
                 </p>
               </motion.div>
@@ -647,7 +737,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
 
         {/* ── Loading ── */}
         {loading && retryAttempt === 0 && (
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8"><Skeleton /></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8"><Skeleton tab={activeTab} /></div>
         )}
 
         {/* ── Results ── */}
@@ -689,11 +779,29 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                   (activeTab === 'news'   && newsResults?.results.length   === 0) ||
                   (activeTab === 'images' && imageResults?.results.length  === 0) ||
                   (activeTab === 'videos' && videoResults?.results.length  === 0)) && (
-                  <div className="flex flex-col items-center justify-center py-32 gap-4">
-                    <div className="text-5xl">🔍</div>
-                    <p className="text-lg font-semibold if-text">No results found</p>
-                    <p className="text-sm if-muted">Try different keywords or broaden your search</p>
-                  </div>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex flex-col items-center justify-center py-32 px-4 text-center"
+                  >
+                    <div className="relative mb-6">
+                      <div className="absolute inset-0 bg-indigo-500/20 blur-3xl rounded-full scale-150" />
+                      <div className="relative if-surface p-6 rounded-full border if-border-strong shadow-lg">
+                        <Search className="w-10 h-10 if-muted" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold if-text mb-2">No results found</h3>
+                    <p className="text-sm if-muted max-w-sm leading-relaxed">
+                      We couldn't find any results for &ldquo;<span className="if-text font-medium">{query}</span>&rdquo;. 
+                      Try adjusting your keywords or switching tabs.
+                    </p>
+                    <button 
+                      onClick={() => { setQuery(''); handleHome(); }}
+                      className="mt-8 if-pill px-6 py-2.5 rounded-2xl text-sm font-semibold transition-all"
+                    >
+                      Return Home
+                    </button>
+                  </motion.div>
                 )}
 
                 {activeTab === 'web' && webResults && webResults.total > LIMIT && (

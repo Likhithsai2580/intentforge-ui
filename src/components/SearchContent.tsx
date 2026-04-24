@@ -273,20 +273,32 @@ export default function SearchContent() {
           {/* Loading skeleton */}
           {loading && retryAttempt === 0 && (
             <div className="max-w-5xl mx-auto px-4 py-8 font-mono">
-              <p className="text-[var(--muted)] text-xs mb-6 animate-pulse">
-                <span className="text-[var(--accent)]">C:\&gt;</span> executing query... <span className="cursor-blink">_</span>
-              </p>
-              <div className="space-y-4">
+              <div className="flex items-center gap-3 mb-8">
+                <span className="text-[var(--accent)] text-sm">&gt;</span>
+                <p className="text-[var(--muted)] text-xs animate-pulse">
+                  EXECUTING_QUERY_FETCH... [STATE: RUNNING] <span className="cursor-blink">_</span>
+                </p>
+              </div>
+              <div className="space-y-6">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="p-4 border border-[var(--border)] animate-pulse bg-[var(--card)]">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="w-4 h-4 bg-[var(--border)]" />
-                      <div className="h-3 bg-[var(--border)] rounded w-32" />
+                  <div key={i} className="p-5 border border-[var(--border)] bg-[var(--card)]/30 relative overflow-hidden group">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-[var(--accent)]/20" />
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-4 h-4 bg-[var(--border)]/50 animate-pulse" />
+                        <div className="h-2 bg-[var(--border)]/50 w-32 animate-pulse" />
+                      </div>
+                      <div className="h-2 bg-[var(--border)]/30 w-16 animate-pulse hidden sm:block" />
                     </div>
-                    <div className="h-4 bg-[var(--border)] rounded w-3/4 mb-3" />
-                    <div className="space-y-2">
-                      <div className="h-3 bg-[var(--border)] rounded w-full" />
-                      <div className="h-3 bg-[var(--border)] rounded w-2/3" />
+                    <div className="h-4 bg-[var(--accent)]/10 w-3/4 mb-4 animate-pulse" />
+                    <div className="space-y-2.5">
+                      <div className="h-2 bg-[var(--border)]/40 w-full animate-pulse" style={{ animationDelay: '0.1s' }} />
+                      <div className="h-2 bg-[var(--border)]/40 w-11/12 animate-pulse" style={{ animationDelay: '0.2s' }} />
+                      <div className="h-2 bg-[var(--border)]/40 w-4/5 animate-pulse" style={{ animationDelay: '0.3s' }} />
+                    </div>
+                    <div className="mt-5 flex gap-2">
+                      <div className="h-4 bg-[var(--border)]/20 w-16 rounded-sm animate-pulse" />
+                      <div className="h-4 bg-[var(--border)]/20 w-20 rounded-sm animate-pulse" />
                     </div>
                   </div>
                 ))}
