@@ -12,7 +12,17 @@ interface WebResultsProps {
 
 export default function WebResults({ results, total, latency_ms, message, onContentClick }: WebResultsProps) {
   const getDomain = (url: string) => {
-    try { return new URL(url).hostname.replace('www.', ''); } catch { return url; }
+    try {
+      let target = url;
+      if (url.includes('redirect.viglink.com')) {
+        const urlObj = new URL(url);
+        const u = urlObj.searchParams.get('u');
+        if (u) target = u;
+      }
+      return new URL(target).hostname.replace('www.', '');
+    } catch {
+      return url;
+    }
   };
 
   return (

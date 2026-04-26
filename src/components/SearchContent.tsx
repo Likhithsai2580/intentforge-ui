@@ -349,9 +349,14 @@ export default function SearchContent() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[10px] text-[var(--muted)] tracking-widest">
-            &copy; {new Date().getFullYear()} OXIVERSE // INTENTFORGE. ALL RIGHTS RESERVED.
-          </p>
+          <div className="flex flex-col gap-1">
+            <p className="text-[10px] text-[var(--muted)] tracking-widest uppercase">
+              &copy; {new Date().getFullYear()} OXIVERSE // INTENTFORGE. ALL RIGHTS RESERVED.
+            </p>
+            <p className="text-[9px] text-[var(--muted)] italic opacity-70">
+              We may earn a commission from qualifying purchases.
+            </p>
+          </div>
           <div className="flex gap-6 text-[10px] text-[var(--muted)]">
             <a href="https://oxiverse.com/tos" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors">[tos]</a>
             <a href="https://oxiverse.com/privacy" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors">[privacy]</a>

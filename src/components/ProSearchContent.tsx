@@ -267,7 +267,18 @@ function Skeleton({ tab }: { tab: Tab }) {
 
 // ── AI Insight Panel ───────────────────────────────────────────────────────────
 function AIInsightPanel({ query, results }: { query: string; results: SearchResult[] }) {
-  const topDomains = [...new Set(results.slice(0, 5).map(r => { try { return new URL(r.url).hostname.replace('www.', ''); } catch { return ''; } }).filter(Boolean))];
+  const topDomains = [...new Set(results.slice(0, 5).map(r => {
+    try {
+      let target = r.url;
+      if (r.url.includes('redirect.viglink.com')) {
+        const u = new URL(r.url).searchParams.get('u');
+        if (u) target = u;
+      }
+      return new URL(target).hostname.replace('www.', '');
+    } catch {
+      return '';
+    }
+  }).filter(Boolean))];
   const avgRelevance = results.length ? (results.reduce((s, r) => s + r.relevance_score, 0) / results.length * 100).toFixed(0) : '0';
   const topCategory = results.length ? results.reduce((acc, r) => { acc[r.category] = (acc[r.category] || 0) + 1; return acc; }, {} as Record<string, number>) : {};
   const primaryCategory = Object.entries(topCategory).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
@@ -299,8 +310,30 @@ function AIInsightPanel({ query, results }: { query: string; results: SearchResu
 
 // ── Web Results ────────────────────────────────────────────────────────────────
 function WebResults({ results, total, latency_ms }: { results: SearchResult[]; total: number; latency_ms: number }) {
-  const getDomain = (url: string) => { try { return new URL(url).hostname.replace('www.', ''); } catch { return url; } };
-  const getFavicon = (url: string) => { try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=32`; } catch { return null; } };
+  const getDomain = (url: string) => {
+    try {
+      let target = url;
+      if (url.includes('redirect.viglink.com')) {
+        const u = new URL(url).searchParams.get('u');
+        if (u) target = u;
+      }
+      return new URL(target).hostname.replace('www.', '');
+    } catch {
+      return url;
+    }
+  };
+  const getFavicon = (url: string) => {
+    try {
+      let target = url;
+      if (url.includes('redirect.viglink.com')) {
+        const u = new URL(url).searchParams.get('u');
+        if (u) target = u;
+      }
+      return `https://www.google.com/s2/favicons?domain=${new URL(target).hostname}&sz=32`;
+    } catch {
+      return null;
+    }
+  };
 
   return (
     <div>
@@ -816,9 +849,12 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
       {/* ── Footer ── */}
       <footer className="if-footer border-t mt-auto py-6 px-4 relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Image src="/assets/intentforge.JPG" alt="" width={16} height={16} className="rounded opacity-60" />
-            <span className="text-xs if-muted">© {new Date().getFullYear()} Oxiverse · IntentForge</span>
+          <div className="flex flex-col sm:items-start items-center gap-1">
+            <div className="flex items-center gap-2">
+              <Image src="/assets/intentforge.JPG" alt="" width={16} height={16} className="rounded opacity-60" />
+              <span className="text-xs if-muted">© {new Date().getFullYear()} Oxiverse · IntentForge</span>
+            </div>
+            <p className="text-[10px] if-muted opacity-60 italic">We may earn a commission from qualifying purchases.</p>
           </div>
           <div className="flex items-center gap-5 text-xs if-muted">
             <a href="https://oxiverse.com/privacy" target="_blank" rel="noopener noreferrer" className="hover:if-text transition-colors">Privacy</a>

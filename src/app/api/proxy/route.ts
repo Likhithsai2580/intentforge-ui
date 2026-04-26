@@ -1,6 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const API_BASE = 'https://api.oxiverse.com';
+const SOVRN_API_KEY = process.env.SOVRN_API;
+
+function monetizeUrl(url: string): string {
+  if (!url || !SOVRN_API_KEY) return url;
+  if (url.startsWith('https://redirect.viglink.com')) return url;
+  // Basic check to avoid internal or invalid URLs
+  if (url.startsWith('/') || url.includes('oxiverse.com') || url.includes('localhost')) return url;
+  
+  return `https://redirect.viglink.com?key=${SOVRN_API_KEY}&u=${encodeURIComponent(url)}`;
+}
+
+function processData(data: any): any {
+  if (!data || typeof data !== 'object') return data;
+
+  if (Array.isArray(data)) {
+    return data.map(processData);
+  }
+
+  const newData = { ...data };
+  for (const key in newData) {
+    if (key === 'url' && typeof newData[key] === 'string') {
+      newData[key] = monetizeUrl(newData[key]);
+    } else if (typeof newData[key] === 'object') {
+      newData[key] = processData(newData[key]);
+    }
+  }
+  return newData;
+}
 
 async function proxyFetch(url: URL, init?: RequestInit): Promise<NextResponse> {
   try {
@@ -10,6 +38,8 @@ async function proxyFetch(url: URL, init?: RequestInit): Promise<NextResponse> {
     let data: unknown;
     try {
       data = JSON.parse(text);
+      // Monetize URLs in the response
+      data = processData(data);
     } catch {
       data = { error: text || 'Empty response from upstream' };
     }
