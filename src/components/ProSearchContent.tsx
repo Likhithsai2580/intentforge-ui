@@ -589,6 +589,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
   const { dark, toggle: toggleDark, mounted: themeMounted } = useDarkMode();
 
   const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [committedQuery, setCommittedQuery] = useState(searchParams.get('q') || '');
   const [activeTab, setActiveTab] = useState<Tab>((searchParams.get('tab') as Tab) || 'web');
   const [loading, setLoading] = useState(false);
   const [retryAttempt, setRetryAttempt] = useState(0);
@@ -610,6 +611,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
     setLoading(true); setRetryAttempt(0); setOffset(newOffset);
     router.push(`/?q=${encodeURIComponent(q)}&tab=${tab}`, { scroll: false });
     setQuery(q);
+    setCommittedQuery(q);
     try {
       let attempt = 0;
       while (attempt < 3) {
@@ -647,7 +649,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
   const handleSearch   = () => { if (query.trim()) { setOffset(0); performSearch(query.trim(), activeTab, 0); } };
   const handleTabChange = (tab: Tab) => { setActiveTab(tab); setOffset(0); if (query) performSearch(query, tab, 0); };
   const handlePageChange = (p: number) => { performSearch(query, activeTab, (p-1)*LIMIT); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-  const handleHome = () => { setQuery(''); setWebResults(null); setNewsResults(null); setImageResults(null); setVideoResults(null); setOffset(0); router.push('/'); };
+  const handleHome = () => { setQuery(''); setCommittedQuery(''); setWebResults(null); setNewsResults(null); setImageResults(null); setVideoResults(null); setOffset(0); router.push('/'); };
 
   const hasResults = webResults || newsResults || imageResults || videoResults;
   const currentPage = Math.floor(offset / LIMIT) + 1;
@@ -797,7 +799,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
 
                 {/* AI panel for web results */}
                 {activeTab === 'web' && webResults && webResults.results.length > 0 && (
-                  <AIInsightPanel query={query} results={webResults.results} />
+                  <AIInsightPanel query={committedQuery} results={webResults.results} />
                 )}
 
                 <div className={activeTab === 'web' ? 'max-w-3xl' : 'w-full'}>
