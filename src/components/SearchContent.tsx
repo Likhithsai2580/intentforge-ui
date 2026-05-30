@@ -39,7 +39,21 @@ export default function SearchContent() {
   const [query, setQuery] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState(initialTab);
   const [loading, setLoading] = useState(false);
-  const [webResults, setWebResults] = useState<{ results: SearchResult[]; total: number; latency_ms: number; message?: string | null } | null>(null);
+  const [webResults, setWebResults] = useState<{
+    results: SearchResult[];
+    total: number;
+    latency_ms: number;
+    message?: string | null;
+    intent?: string;
+    category?: string;
+    confidence?: number;
+    constraints?: string[];
+    structured_constraints?: {
+      positive: string[];
+      negative: string[];
+    };
+    expanded_queries?: string[];
+  } | null>(null);
   const [newsResults, setNewsResults] = useState<{ results: any[]; total: number; latency_ms: number; sources: string[] } | null>(null);
   const [imageResults, setImageResults] = useState<{ results: any[]; total: number; latency_ms: number } | null>(null);
   const [videoResults, setVideoResults] = useState<{ results: any[]; total: number; latency_ms: number } | null>(null);
@@ -67,7 +81,21 @@ export default function SearchContent() {
   const fetchOnce = useCallback(async (q: string, tab: string, newOffset: number) => {
     if (tab === 'web') {
       const res = await searchWeb(q, { limit, offset: newOffset });
-      return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms, message: res.message } };
+      return {
+        results: res.results,
+        data: {
+          results: res.results,
+          total: res.total,
+          latency_ms: res.latency_ms,
+          message: res.message,
+          intent: res.intent,
+          category: res.category,
+          confidence: res.confidence,
+          constraints: res.constraints,
+          structured_constraints: res.structured_constraints,
+          expanded_queries: res.expanded_queries,
+        }
+      };
     } else if (tab === 'news') {
       const res = await searchNews(q);
       return { results: res.results, data: { results: res.results, total: res.total, latency_ms: res.latency_ms, sources: res.sources } };
@@ -238,7 +266,80 @@ export default function SearchContent() {
               </div>
               <div className="pb-12">
                 {activeTab === 'web' && webResults && (
-                  <WebResults results={webResults.results} total={webResults.total} latency_ms={webResults.latency_ms} message={webResults.message} onContentClick={setSelectedContentId} />
+                  <>
+                    {(webResults.intent || (webResults.expanded_queries && webResults.expanded_queries.length > 0)) && (
+                      <div className="mb-6 p-4 border border-[var(--border)] bg-[var(--card)] text-xs font-mono relative overflow-hidden" style={{ boxShadow: '0 0 15px rgba(0,255,157,0.05)' }}>
+                        <div className="absolute top-0 right-0 px-2 py-0.5 bg-[var(--accent)] text-black text-[9px] font-bold tracking-widest uppercase">
+                          AI Intent Synthesis
+                        </div>
+                        <div className="space-y-2.5">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 border-b border-[var(--border)] pb-2.5">
+                            <div>
+                              <span className="text-[var(--accent)]">INTENT:</span>{' '}
+                              <span className="text-[var(--foreground)] font-bold uppercase">{webResults.intent || 'N/A'}</span>
+                            </div>
+                            <div>
+                              <span className="text-[var(--accent)]">CONFIDENCE:</span>{' '}
+                              <span className="text-[var(--foreground)] font-bold">
+                                {webResults.confidence != null ? `${(webResults.confidence * 100).toFixed(0)}%` : '100%'}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-[var(--accent)]">CATEGORY:</span>{' '}
+                              <span className="text-[var(--foreground)] font-bold uppercase">{webResults.category || 'N/A'}</span>
+                            </div>
+                            <div>
+                              <span className="text-[var(--accent)]">SOURCES:</span>{' '}
+                              <span className="text-[var(--foreground)]">ANALYSED ({webResults.results.length})</span>
+                            </div>
+                          </div>
+
+                          {webResults.expanded_queries && webResults.expanded_queries.length > 0 && (
+                            <div className="border-b border-[var(--border)] pb-2.5">
+                              <span className="text-[var(--muted)]">// Expanded queries:</span>
+                              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                                {webResults.expanded_queries.map((eq, i) => (
+                                  <span key={i} className="px-2 py-0.5 bg-[var(--background)] text-[var(--accent)] border border-[var(--accent)]/20 rounded-sm">
+                                    &gt; {eq}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {webResults.structured_constraints && (webResults.structured_constraints.positive.length > 0 || webResults.structured_constraints.negative.length > 0) && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-0.5">
+                              {webResults.structured_constraints.positive.length > 0 && (
+                                <div>
+                                  <span className="text-emerald-400 font-bold uppercase">// REQUIRED (+):</span>
+                                  <div className="mt-1 flex flex-wrap gap-1">
+                                    {webResults.structured_constraints.positive.map((p, i) => (
+                                      <span key={i} className="px-1.5 py-0.5 bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 rounded-sm text-[10px]">
+                                        +{p}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              {webResults.structured_constraints.negative.length > 0 && (
+                                <div>
+                                  <span className="text-[var(--terminal-red)] font-bold uppercase">// EXCLUDED (-):</span>
+                                  <div className="mt-1 flex flex-wrap gap-1">
+                                    {webResults.structured_constraints.negative.map((n, i) => (
+                                      <span key={i} className="px-1.5 py-0.5 bg-rose-500/5 border border-rose-500/10 text-[var(--terminal-red)] rounded-sm text-[10px]">
+                                        -{n}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <WebResults results={webResults.results} total={webResults.total} latency_ms={webResults.latency_ms} message={webResults.message} onContentClick={setSelectedContentId} />
+                  </>
                 )}
                 {activeTab === 'news' && newsResults && (
                   <NewsResults results={newsResults.results} total={newsResults.total} latency_ms={newsResults.latency_ms} sources={newsResults.sources} />

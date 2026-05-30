@@ -82,7 +82,7 @@ export default function WebResults({ results, total, latency_ms, message, onCont
                 </div>
               </div>
 
-              {onContentClick && (
+              {onContentClick && !result.id.startsWith('http') && (
                 <button
                   onClick={() => onContentClick(result.id)}
                   className="opacity-0 group-hover:opacity-100 flex-shrink-0 px-2 py-1 border border-[var(--border)] text-[var(--muted)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all text-[10px] uppercase tracking-wider"

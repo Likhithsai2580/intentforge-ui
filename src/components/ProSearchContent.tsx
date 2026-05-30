@@ -16,7 +16,21 @@ import { readPrefs, setPref, resolveTheme } from '@/lib/prefs';
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 type Tab = 'web' | 'news' | 'images' | 'videos';
-interface WebData  { results: SearchResult[]; total: number; latency_ms: number; message?: string | null }
+interface WebData  {
+  results: SearchResult[];
+  total: number;
+  latency_ms: number;
+  message?: string | null;
+  intent?: string;
+  category?: string;
+  confidence?: number;
+  constraints?: string[];
+  structured_constraints?: {
+    positive: string[];
+    negative: string[];
+  };
+  expanded_queries?: string[];
+}
 interface NewsData { results: NewsResult[];   total: number; latency_ms: number; sources: string[] }
 interface ImageData{ results: ImageResult[];  total: number; latency_ms: number }
 interface VideoData{ results: VideoResult[];  total: number; latency_ms: number }
@@ -266,7 +280,16 @@ function Skeleton({ tab }: { tab: Tab }) {
 }
 
 // ── AI Insight Panel ───────────────────────────────────────────────────────────
-function AIInsightPanel({ query, results }: { query: string; results: SearchResult[] }) {
+function AIInsightPanel({ data, query }: { data: WebData; query: string }) {
+  const {
+    results = [],
+    intent = 'informational',
+    category = 'informational',
+    confidence = 1.0,
+    structured_constraints = { positive: [], negative: [] },
+    expanded_queries = []
+  } = data;
+
   const topDomains = [...new Set(results.slice(0, 5).map(r => {
     try {
       let target = r.url;
@@ -279,30 +302,80 @@ function AIInsightPanel({ query, results }: { query: string; results: SearchResu
       return '';
     }
   }).filter(Boolean))];
-  const avgRelevance = results.length ? (results.reduce((s, r) => s + r.relevance_score, 0) / results.length * 100).toFixed(0) : '0';
-  const topCategory = results.length ? results.reduce((acc, r) => { acc[r.category] = (acc[r.category] || 0) + 1; return acc; }, {} as Record<string, number>) : {};
-  const primaryCategory = Object.entries(topCategory).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
 
   return (
     <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-      className="if-ai-panel rounded-2xl p-5 mb-6">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="if-ai-icon p-1.5 rounded-lg">
-          <Sparkles className="w-3.5 h-3.5" />
+      className="if-ai-panel rounded-2xl p-6 mb-6 border border-indigo-500/10">
+      <div className="flex flex-wrap items-center gap-3 mb-4">
+        <div className="if-ai-icon p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400">
+          <Sparkles className="w-4 h-4 animate-pulse" />
         </div>
-        <span className="text-xs font-semibold if-ai-label tracking-wide uppercase">AI Synthesis</span>
-        <span className="ml-auto text-xs if-muted">{results.length} sources analyzed</span>
+        <div>
+          <span className="text-xs font-bold if-ai-label tracking-wider uppercase text-indigo-400">AI Synthesis & Intent</span>
+          <div className="flex items-center gap-1.5 mt-0.5 font-mono text-[10px]">
+            <span className="text-[var(--if-accent)] capitalize font-semibold">{intent}</span>
+            <span className="text-[10px] if-muted">•</span>
+            <span className="text-xs if-muted capitalize">{category} category</span>
+            <span className="text-[10px] if-muted">•</span>
+            <span className="text-xs text-emerald-400 font-medium">{(confidence * 100).toFixed(0)}% confidence</span>
+          </div>
+        </div>
+        <span className="ml-auto text-[11px] if-muted hidden sm:inline-block">{results.length} sources analyzed</span>
       </div>
-      <p className="text-sm if-ai-text leading-relaxed mb-3">
-        Results for <span className="if-ai-highlight font-medium">&ldquo;{query}&rdquo;</span> span{' '}
-        <span className="if-ai-highlight font-medium">{primaryCategory || 'general'}</span> content with an average relevance of{' '}
-        <span className="if-ai-highlight font-medium">{avgRelevance}%</span>.
-        {topDomains.length > 0 && <> Top sources include {topDomains.slice(0, 3).join(', ')}.</>}
-      </p>
-      <div className="flex flex-wrap gap-2">
-        {topDomains.slice(0, 4).map(d => (
-          <span key={d} className="if-ai-chip text-xs px-2.5 py-1 rounded-full">{d}</span>
-        ))}
+
+      <div className="space-y-4">
+        {expanded_queries.length > 0 && (
+          <div>
+            <span className="text-[10px] font-semibold if-muted tracking-wider uppercase block mb-1.5 font-mono">// Query Expansions:</span>
+            <div className="flex flex-wrap gap-1.5">
+              {expanded_queries.map(q => (
+                <span key={q} className="text-xs px-2.5 py-1 rounded-lg bg-indigo-500/5 text-indigo-300 border border-indigo-500/10 font-mono">
+                  {q}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {(structured_constraints.positive.length > 0 || structured_constraints.negative.length > 0) && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-[var(--if-glass-border)]">
+            {structured_constraints.positive.length > 0 && (
+              <div>
+                <span className="text-[10px] font-semibold text-emerald-400/80 tracking-wider uppercase block mb-1.5 font-mono">// Required Concepts (+):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {structured_constraints.positive.map(p => (
+                    <span key={p} className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 font-mono">
+                      +{p}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+            {structured_constraints.negative.length > 0 && (
+              <div>
+                <span className="text-[10px] font-semibold text-rose-400/80 tracking-wider uppercase block mb-1.5 font-mono">// Excluding Concepts (-):</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {structured_constraints.negative.map(n => (
+                    <span key={n} className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-300 border border-rose-500/20 font-mono">
+                      -{n}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {topDomains.length > 0 && (
+          <div className="pt-3 border-t border-[var(--if-glass-border)]">
+            <span className="text-[10px] font-semibold if-muted tracking-wider uppercase block mb-1.5 font-mono">// Identified Authorities:</span>
+            <div className="flex flex-wrap gap-2">
+              {topDomains.slice(0, 4).map(d => (
+                <span key={d} className="if-ai-chip text-xs px-2.5 py-1 rounded-full font-mono">{d}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );
@@ -358,7 +431,17 @@ function WebResults({ results, total, latency_ms }: { results: SearchResult[]; t
                 ) : <Globe className="w-3 h-3 if-muted" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs if-muted mb-1 truncate">{getDomain(r.url)}</p>
+                <div className="flex flex-wrap items-center gap-2 mb-1">
+                  <p className="text-xs if-muted truncate">{getDomain(r.url)}</p>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded bg-violet-500/5 border border-violet-500/10 text-violet-400 font-mono font-medium tracking-wide uppercase">
+                    {r.source}
+                  </span>
+                  {r.is_local && (
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/5 border border-emerald-500/10 text-emerald-400 font-mono font-medium tracking-wide uppercase">
+                      local index
+                    </span>
+                  )}
+                </div>
                 <a href={r.url} target="_blank" rel="noopener noreferrer"
                   className="if-link text-base font-semibold leading-snug block mb-1.5 hover:underline underline-offset-2">
                   {r.title}
@@ -601,7 +684,24 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
   const [videoResults, setVideoResults] = useState<VideoData | null>(null);
 
   const fetchOnce = useCallback(async (q: string, tab: Tab, off: number) => {
-    if (tab === 'web')    { const r = await searchWeb(q, { limit: LIMIT, offset: off }); return { results: r.results, data: { results: r.results, total: r.total, latency_ms: r.latency_ms, message: r.message } }; }
+    if (tab === 'web') {
+      const r = await searchWeb(q, { limit: LIMIT, offset: off });
+      return {
+        results: r.results,
+        data: {
+          results: r.results,
+          total: r.total,
+          latency_ms: r.latency_ms,
+          message: r.message,
+          intent: r.intent,
+          category: r.category,
+          confidence: r.confidence,
+          constraints: r.constraints,
+          structured_constraints: r.structured_constraints,
+          expanded_queries: r.expanded_queries
+        }
+      };
+    }
     if (tab === 'news')   { const r = await searchNews(q);   return { results: r.results, data: { results: r.results, total: r.total, latency_ms: r.latency_ms, sources: r.sources } }; }
     if (tab === 'images') { const r = await searchImages(q); return { results: r.results, data: { results: r.results, total: r.total, latency_ms: r.latency_ms } }; }
     const r = await searchVideos(q); return { results: r.results, data: { results: r.results, total: r.total, latency_ms: r.latency_ms } };
@@ -799,7 +899,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
 
                 {/* AI panel for web results */}
                 {activeTab === 'web' && webResults && webResults.results.length > 0 && (
-                  <AIInsightPanel query={committedQuery} results={webResults.results} />
+                  <AIInsightPanel data={webResults} query={committedQuery} />
                 )}
 
                 <div className={activeTab === 'web' ? 'max-w-3xl' : 'w-full'}>

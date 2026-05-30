@@ -11,6 +11,12 @@ export interface SearchResult {
   relevance_score: number;
   commercial_score: number;
   spam_score: number;
+  // v2 API fields
+  authority?: number;
+  is_local?: boolean;
+  sources?: string[];
+  content?: string;
+  score?: number;
 }
 
 export interface SearchResponse {
@@ -26,6 +32,16 @@ export interface SearchResponse {
     description: string;
   }>;
   self_improving?: boolean;
+  // v2 API fields
+  intent?: string;
+  category?: string;
+  confidence?: number;
+  constraints?: string[];
+  structured_constraints?: {
+    positive: string[];
+    negative: string[];
+  };
+  expanded_queries?: string[];
 }
 
 export interface NewsResult {
