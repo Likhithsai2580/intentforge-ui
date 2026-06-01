@@ -1,0 +1,62 @@
+# IntentForge by Oxiverse
+
+> IntentForge is an AI-powered, intent-first search engine built by Oxiverse. It goes beyond keyword matching by classifying user intent (navigational, informational, technical, how-to, comparison, transactional, fresh) and expanding queries semantically before searching.
+
+## What It Does
+
+- **Web Search**: Multi-engine aggregated results from SearXNG, Brave, DuckDuckGo, Bing, Whoogle, Invidious, Mojeek, Startpage, Yandex, Presearch
+- **News Search**: Aggregated from Bing News and Google News
+- **Image Search**: Bing Images via SearXNG
+- **Video Search**: YouTube/Invidious video results
+- **Intent Classification**: Classifies queries into 7 intent types with confidence scores
+- **Query Expansion**: Automatically expands queries with semantic variants
+- **Constraint Extraction**: Identifies required (+) and excluded (-) concepts
+- **Authority Detection**: Identifies top domains relevant to the query
+- **Dual-path Architecture**: VPN path (fast) + Tor path (privacy) for resilient search
+- **Local Index**: TF-IDF based crawler index for previously discovered pages
+
+## Modes
+
+- **Pro Mode** (default): Modern card-based UI with AI insight panels, tabs for Web/News/Images/Videos
+- **Classic Mode**: Terminal-style UI with monospace fonts and command-line aesthetics
+
+## API
+
+The search API is available at `https://api.oxiverse.com/search?q=<query>` (or via the UI at `https://search.oxiverse.com`).
+
+### Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `/search?q=` | Full web search with intent classification |
+| `/images?q=` | Image search |
+| `/videos?q=` | Video search |
+| `/news?q=` | News search |
+| `/health` | Service health check |
+
+### Response Format
+
+```json
+{
+  "query": "string",
+  "intent": "navigational|informational|technical|how-to|comparison|transactional|fresh",
+  "confidence": 0.0-1.0,
+  "results": [
+    {
+      "title": "string",
+      "url": "string",
+      "content": "string",
+      "score": 0.0-1.0,
+      "sources": ["engine1", "engine2"]
+    }
+  ]
+}
+```
+
+## Links
+
+- Website: https://search.oxiverse.com
+- About: https://search.oxiverse.com/about
+- Privacy: https://oxiverse.com/privacy
+- Terms: https://oxiverse.com/tos
+- GitHub: https://github.com/oxiverse-labs

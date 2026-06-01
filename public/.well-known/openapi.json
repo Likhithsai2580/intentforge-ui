@@ -1,0 +1,198 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "IntentForge Search API",
+    "version": "2.0.0",
+    "description": "AI-powered intent-first search engine API by Oxiverse",
+    "contact": {
+      "email": "likhith@oxiverse.com"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.oxiverse.com",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/search": {
+      "get": {
+        "summary": "Search the web with intent classification",
+        "operationId": "searchWeb",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search query"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 15
+            },
+            "description": "Number of results"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0
+            },
+            "description": "Pagination offset"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results with intent classification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/images": {
+      "get": {
+        "summary": "Search for images",
+        "operationId": "searchImages",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image results"
+          }
+        }
+      }
+    },
+    "/videos": {
+      "get": {
+        "summary": "Search for videos",
+        "operationId": "searchVideos",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Video results"
+          }
+        }
+      }
+    },
+    "/news": {
+      "get": {
+        "summary": "Search for news articles",
+        "operationId": "searchNews",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News results"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "operationId": "healthCheck",
+        "responses": {
+          "200": {
+            "description": "Service healthy"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchResponse": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          },
+          "intent": {
+            "type": "string",
+            "enum": [
+              "navigational",
+              "informational",
+              "technical",
+              "how-to",
+              "comparison",
+              "transactional",
+              "fresh"
+            ]
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "score": {
+                  "type": "number"
+                },
+                "sources": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

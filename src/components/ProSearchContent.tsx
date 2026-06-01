@@ -902,6 +902,31 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
                   <AIInsightPanel data={webResults} query={committedQuery} />
                 )}
 
+                {/* JSON-LD for search results */}
+                {activeTab === 'web' && webResults && webResults.results.length > 0 && (
+                  <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                      __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SearchResultsPage",
+                        "name": `Search results for "${committedQuery}"`,
+                        "url": `https://search.oxiverse.com/?q=${encodeURIComponent(committedQuery)}`,
+                        "mainEntity": {
+                          "@type": "ItemList",
+                          "numberOfItems": webResults.total,
+                          "itemListElement": webResults.results.slice(0, 10).map((r, i) => ({
+                            "@type": "ListItem",
+                            "position": i + 1,
+                            "url": r.url,
+                            "name": r.title,
+                          }))
+                        }
+                      })
+                    }}
+                  />
+                )}
+
                 <div className={activeTab === 'web' ? 'max-w-3xl' : 'w-full'}>
                   {activeTab === 'web'    && webResults    && <WebResults    results={webResults.results}    total={webResults.total}    latency_ms={webResults.latency_ms} />}
                   {activeTab === 'news'   && newsResults   && <NewsResults   results={newsResults.results}   total={newsResults.total}   latency_ms={newsResults.latency_ms} />}
@@ -956,7 +981,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
               <Image src="/assets/intentforge.JPG" alt="" width={16} height={16} className="rounded opacity-60" />
               <span className="text-xs if-muted">© {new Date().getFullYear()} Oxiverse · IntentForge</span>
             </div>
-            <p className="text-[10px] if-muted opacity-60 italic">We may earn a commission from qualifying purchases.</p>
+            <p className="text-[10px] if-muted opacity-60 italic">Results sourced from multiple engines for unbiased discovery.</p>
           </div>
           <div className="flex items-center gap-5 text-xs if-muted">
             <a href="https://oxiverse.com/privacy" target="_blank" rel="noopener noreferrer" className="hover:if-text transition-colors">Privacy</a>

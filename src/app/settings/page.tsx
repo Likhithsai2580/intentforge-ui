@@ -5,7 +5,6 @@ import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { readPrefs, setPref, resolveTheme, DEFAULT_PREFS, type UserPrefs } from '@/lib/prefs';
 
-export const dynamic = 'force-dynamic';
 
 // ── Shared hook ────────────────────────────────────────────────────────────────
 function usePrefs() {

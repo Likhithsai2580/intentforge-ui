@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "IntentForge Search",
+  "name_for_model": "intentforge_search",
+  "description_for_human": "AI-powered intent-first search engine. Search the web, news, images, and videos with semantic understanding.",
+  "description_for_model": "IntentForge is an AI-powered search engine by Oxiverse that classifies user intent, expands queries semantically, and aggregates results from multiple search engines (SearXNG, Brave, DuckDuckGo, Bing, etc.). Use it to search the web, find news articles, images, and videos. The search API returns intent-classified, relevance-scored results.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://search.oxiverse.com/.well-known/openapi.json"
+  },
+  "logo_url": "https://search.oxiverse.com/assets/oxiverse.png",
+  "contact_email": "likhith@oxiverse.com",
+  "legal_info_url": "https://oxiverse.com/tos"
+}

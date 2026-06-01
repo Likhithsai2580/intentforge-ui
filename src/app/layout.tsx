@@ -159,7 +159,6 @@ export default function RootLayout({
     >
       <head>
         <link rel="apple-touch-icon" href="/assets/oxiverse.png" />
-        <meta name="theme-color" content="#0a0c0f" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
