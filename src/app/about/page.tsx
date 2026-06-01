@@ -57,6 +57,13 @@ export default function About() {
               <span className="text-[var(--accent)]">&gt;</span> Built for the decentralized era. Open-source. Intent-driven. Explore the most advanced semantic search engine on the web today.
             </p>
           </div>
+
+          <div className="pt-4 border-t border-[var(--border)] space-y-2 text-xs text-[var(--muted)] leading-relaxed">
+            <h2 className="text-[10px] tracking-widest uppercase text-[var(--foreground)] mb-2">// Disclosure</h2>
+            <p>
+              <span className="text-[var(--accent)]">&gt;</span> IntentForge aggregates results from multiple third-party search engines. Some outbound links may be affiliate links — we may earn a commission from qualifying purchases at no additional cost to you. This does not influence our search rankings or result ordering, which are determined purely by relevance scoring and intent classification.
+            </p>
+          </div>
         </div>
       </div>
     </main>

@@ -981,7 +981,7 @@ export default function ProSearchContent({ mode = 'default' }: { mode?: 'default
               <Image src="/assets/intentforge.JPG" alt="" width={16} height={16} className="rounded opacity-60" />
               <span className="text-xs if-muted">© {new Date().getFullYear()} Oxiverse · IntentForge</span>
             </div>
-            <p className="text-[10px] if-muted opacity-60 italic">Results sourced from multiple engines for unbiased discovery.</p>
+            <p className="text-[10px] if-muted opacity-60 italic">Some links may be affiliate links — <a href="/about" className="underline hover:if-text">disclosure</a>.</p>
           </div>
           <div className="flex items-center gap-5 text-xs if-muted">
             <a href="https://oxiverse.com/privacy" target="_blank" rel="noopener noreferrer" className="hover:if-text transition-colors">Privacy</a>
